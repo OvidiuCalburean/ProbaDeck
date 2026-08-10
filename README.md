@@ -189,6 +189,6 @@ Stress failures include a fast-check seed and shrink path. Reproduce one exactly
 `PROBADECK_STRESS_RUNS` and `PROBADECK_STRESS_COMMANDS`. Scheduled CI raises both the property and
 state-machine budgets beyond the pull-request suite.
 
-See the [v1 specification](spec/v1.md), [conformance guide](conformance/README.md), and
-[saved implementation plan](spec/implementation-plan.md). The repository is MIT licensed; the
-first npm publication remains an explicit release action.
+See the [conformance guide](conformance/README.md) for the portable scenario format and expected
+results. The repository is MIT licensed; the first npm publication remains an explicit release
+action.
