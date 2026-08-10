@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { ProbabilityQuery } from "probadeck";
+import { ProbaDeckError, type ProbabilityQuery } from "probadeck";
 
 import { AppHeader } from "../components/AppHeader.js";
 import { EventTimeline } from "../components/EventTimeline.js";
@@ -31,6 +31,22 @@ function createSessions(): Readonly<Record<ScenarioId, ScenarioSession>> {
 function scenarioFromHash(): ScenarioId {
   const candidate = window.location.hash.slice(1);
   return candidate === "magic" || candidate === "yugioh" ? candidate : "holdem";
+}
+
+function errorNotice(error: unknown): string {
+  if (error instanceof ProbaDeckError && error.code === "INFERENCE_LIMIT_EXCEEDED") {
+    const projected = error.details.projectedHypotheses;
+    const maximum = error.details.maxHypotheses;
+    const actions = error.details.recommendedActions;
+    const firstAction =
+      Array.isArray(actions) && typeof actions[0] === "string" ? actions[0] : null;
+    const counts =
+      typeof projected === "number" && typeof maximum === "number"
+        ? ` Projected ${projected.toLocaleString()} hypotheses; limit ${maximum.toLocaleString()}.`
+        : "";
+    return `Exact inference preflight stopped this operation.${counts}${firstAction === null ? "" : ` ${firstAction}`}`;
+  }
+  return error instanceof Error ? error.message : String(error);
 }
 
 export function ExamplesPage() {
@@ -74,7 +90,7 @@ export function ExamplesPage() {
         setNotice(next.events.at(-1)?.detail ?? null);
         return { ...current, [activeId]: next };
       } catch (error) {
-        setNotice(error instanceof Error ? error.message : String(error));
+        setNotice(errorNotice(error));
         return current;
       }
     });

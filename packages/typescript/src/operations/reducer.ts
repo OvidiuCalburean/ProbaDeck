@@ -35,6 +35,7 @@ import type {
   InsertOutput,
   JsonObject,
   JsonValue,
+  KnowledgeComplexity,
   Location,
   MoveOptions,
   MoveOutput,
@@ -265,6 +266,17 @@ export function getDrawnCards<TCard>(deck: Deck<TCard>): readonly CardInstance<T
   return Object.freeze(
     internal.drawn.map((instanceId) => requireInstance(internal.instances, instanceId)),
   );
+}
+
+export function getKnowledgeComplexity<TCard>(deck: Deck<TCard>): KnowledgeComplexity {
+  const internal = asInternalDeck(deck);
+  const hypothesisCount = internal.knowledge.hypotheses.length;
+  return Object.freeze({
+    hypothesisCount,
+    maxHypotheses: internal.maxHypotheses,
+    remainingCapacity: internal.maxHypotheses - hypothesisCount,
+    utilization: hypothesisCount / internal.maxHypotheses,
+  });
 }
 
 export function getAuditLog<TCard>(deck: Deck<TCard>): readonly AuditEvent[] {

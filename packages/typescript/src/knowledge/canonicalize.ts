@@ -227,7 +227,15 @@ export function canonicalizeKnowledge(
     fail(
       "INFERENCE_LIMIT_EXCEEDED",
       `The operation would create ${merged.size} hypotheses, exceeding the limit of ${maxHypotheses}.`,
-      { projectedHypotheses: merged.size, maxHypotheses },
+      {
+        projectedHypotheses: merged.size,
+        maxHypotheses,
+        recommendedActions: Object.freeze([
+          "Reveal or observe additional information before retrying.",
+          "Use a smaller hidden region or batch when the workflow allows it.",
+          "Raise maxHypotheses only after profiling memory and latency.",
+        ]),
+      },
     );
   }
 

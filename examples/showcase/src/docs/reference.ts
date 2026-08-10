@@ -131,6 +131,27 @@ for (const instance of drawnCards) {
   console.log(instance.instanceId, instance.cardKey);
 }`,
       },
+      {
+        id: "get-knowledge-complexity",
+        name: "getKnowledgeComplexity",
+        kind: "Function",
+        signature: "getKnowledgeComplexity<TCard>(deck: Deck<TCard>): KnowledgeComplexity",
+        summary:
+          "Reports the current exact observer-hypothesis usage so applications can surface inference headroom before a complex hidden operation.",
+        parameters: [
+          { name: "deck", type: "Deck<TCard>", description: "The snapshot to inspect." },
+        ],
+        returns:
+          "A frozen object containing hypothesisCount, maxHypotheses, remainingCapacity, and utilization.",
+        example: `const complexity = getKnowledgeComplexity(deck);
+
+console.log(
+  \`\${complexity.hypothesisCount}/\${complexity.maxHypotheses} hypotheses\`,
+);`,
+        notes: [
+          "This reports the current exact state; an operation that exceeds the limit still fails atomically with a projected count and recommended actions.",
+        ],
+      },
     ],
   },
   {
@@ -750,6 +771,11 @@ export const typeGroups: readonly TypeGroup[] = [
         description: "Opaque immutable snapshot with public counters.",
       },
       {
+        name: "KnowledgeComplexity",
+        definition: "{ hypothesisCount; maxHypotheses; remainingCapacity; utilization }",
+        description: "Current exact-inference usage and remaining hypothesis capacity.",
+      },
+      {
         name: "CreateDeckOptions<TCard>",
         definition: "{ cards; config; instanceIds?; random?; maxHypotheses? }",
         description: "Inputs accepted by createDeck.",
@@ -996,7 +1022,10 @@ export const errorCodes = [
   ["EMPTY_DECK", "A query requires a next card but the active deck is empty."],
   ["RANDOM_SOURCE_REQUIRED", "A nondeterministic choice has no injected source."],
   ["INVALID_RANDOM_VALUE", "Seed, stream, or custom random output is invalid."],
-  ["INFERENCE_LIMIT_EXCEEDED", "An exact operation would exceed maxHypotheses."],
+  [
+    "INFERENCE_LIMIT_EXCEEDED",
+    "An exact operation would exceed maxHypotheses; details include the projected count and recommended actions.",
+  ],
   ["IMPOSSIBLE_OBSERVATION", "Evidence contradicts the concrete deck state."],
   ["INVALID_SERIALIZED_DATA", "Snapshot or event-log data fails validation."],
   ["UNSUPPORTED_SCHEMA_VERSION", "Serialized data uses an unknown schema version."],

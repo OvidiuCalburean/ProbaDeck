@@ -1,4 +1,12 @@
-import { ArrowRight, CardsThree, Eye, Globe, MagicWand } from "@phosphor-icons/react";
+import {
+  ArrowRight,
+  ArrowSquareOut,
+  CardsThree,
+  Eye,
+  GithubLogo,
+  Globe,
+  MagicWand,
+} from "@phosphor-icons/react";
 
 import { AppHeader } from "../components/AppHeader.js";
 import { SiteFooter } from "../components/SiteFooter.js";
@@ -265,6 +273,37 @@ result.explanation; // structured proof`}</code>
             <a className="button button--dark" href="/docs#languages">
               See language support <ArrowRight aria-hidden="true" />
             </a>
+          </div>
+        </section>
+
+        <section className="community-callout" aria-labelledby="community-title">
+          <div className="site-container community-callout-inner">
+            <GithubLogo aria-hidden="true" size={52} weight="thin" />
+            <div>
+              <h2 id="community-title">Have an idea ProbaDeck does not cover yet?</h2>
+              <p>
+                Feel free to request additional functionality in a GitHub issue, or send a pull
+                request if you would like to help build it.
+              </p>
+            </div>
+            <div className="community-actions">
+              <a
+                className="button button--primary"
+                href="https://github.com/OvidiuCalburean/ProbaDeck/issues/new"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Open an issue <ArrowSquareOut aria-hidden="true" />
+              </a>
+              <a
+                className="button community-button--secondary"
+                href="https://github.com/OvidiuCalburean/ProbaDeck/pulls"
+                target="_blank"
+                rel="noreferrer"
+              >
+                View pull requests <ArrowSquareOut aria-hidden="true" />
+              </a>
+            </div>
           </div>
         </section>
       </main>

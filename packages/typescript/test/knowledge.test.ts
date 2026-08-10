@@ -98,7 +98,18 @@ describe("knowledge canonicalization", () => {
         [hypothesis([fixedCell("a")], [], [], 1, 2), hypothesis([fixedCell("b")], [], [], 1, 2)],
         1,
       ),
-    ).toThrowError(expect.objectContaining({ code: "INFERENCE_LIMIT_EXCEEDED" }));
+    ).toThrowError(
+      expect.objectContaining({
+        code: "INFERENCE_LIMIT_EXCEEDED",
+        details: expect.objectContaining({
+          projectedHypotheses: 2,
+          maxHypotheses: 1,
+          recommendedActions: expect.arrayContaining([
+            "Reveal or observe additional information before retrying.",
+          ]),
+        }),
+      }),
+    );
     expect(
       canonicalizeKnowledge(
         [

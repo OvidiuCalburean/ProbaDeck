@@ -22,3 +22,5 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - The `type: Land` TypeScript explanation strip and its header link are Magic-only and must not render on Texas Hold'em or Yu-Gi-Oh! tabs.
 - Dark action buttons must retain a dark background and readable white label in hover and focus states.
 - The showcase's numbered return control is 1-based from the top: position 1 is the top card, position 2 is second, and UI/event copy must not expose the core's zero-based gap terminology.
+- The homepage closes with a community callout inviting feature requests through GitHub issues and contributions through pull requests.
+- The app favicon reuses the header's thin cube mark on the dark ProbaDeck brand background.

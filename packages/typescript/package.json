@@ -2,6 +2,14 @@
   "name": "probadeck",
   "version": "1.0.0",
   "description": "A deterministic deck simulation and explainable probability engine for partially known card decks.",
+  "homepage": "https://github.com/OvidiuCalburean/ProbaDeck#readme",
+  "bugs": "https://github.com/OvidiuCalburean/ProbaDeck/issues",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OvidiuCalburean/ProbaDeck.git",
+    "directory": "packages/typescript"
+  },
   "files": [
     "dist"
   ],

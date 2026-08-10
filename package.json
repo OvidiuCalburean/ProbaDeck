@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "ProbaDeck is a deterministic deck simulation and explainable probability engine for partially known card decks.",
+  "license": "MIT",
   "scripts": {
     "build": "pnpm build:core && pnpm build:showcase",
     "build:core": "pnpm --filter probadeck build",
@@ -14,6 +15,7 @@
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
     "lint": "pnpm build:core && oxlint . --deny-warnings --report-unused-disable-directives",
+    "pack:package": "node scripts/pack-package.mjs",
     "test": "pnpm --filter probadeck test",
     "test:browser": "pnpm build:core && pnpm --filter probadeck test:browser && pnpm --filter @probadeck/showcase test:browser",
     "test:package": "node scripts/package-smoke-test.mjs",

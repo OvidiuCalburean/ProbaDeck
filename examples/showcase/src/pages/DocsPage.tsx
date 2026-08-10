@@ -10,35 +10,7 @@ import {
   type ApiParameter,
   typeGroups,
 } from "../docs/reference.js";
-
-const quickStartCode = `import {
-  createDeck,
-  createSeededRandom,
-  probabilityWithinDraws,
-  shuffleDeck,
-} from "probadeck";
-
-const initial = createDeck({
-  cards,
-  config: {
-    cardKey: (card) => card.id,
-    classifiers: {
-      kind: (card) => card.kind,
-      tags: (card) => card.tags,
-    },
-  },
-  random: createSeededRandom({ seed: 42n }),
-});
-
-const deck = shuffleDeck(initial).deck;
-const result = probabilityWithinDraws(
-  deck,
-  { kind: "classifier", classifier: "kind", value: "resource" },
-  3,
-);
-
-result.exact;       // reduced bigint fraction
-result.explanation; // structured proof`;
+import { quickStartCode } from "../docs/quickStart.js";
 
 const cardModelCode = `type EncounterCard = {
   id: string;
@@ -303,9 +275,13 @@ export function DocsPage() {
                   identity, hidden order, observer knowledge, exact probability, and deterministic
                   state transitions without encoding the rules of one particular game.
                 </p>
+                <p className="install-status">
+                  MIT licensed and available from source. npm publication is pending the first
+                  explicit release.
+                </p>
                 <div className="install-command">
-                  <code>pnpm add probadeck</code>
-                  <CopyCodeButton text="pnpm add probadeck" />
+                  <code>pnpm pack:package</code>
+                  <CopyCodeButton text="pnpm pack:package" />
                 </div>
                 <dl className="runtime-facts">
                   <div>
@@ -320,6 +296,10 @@ export function DocsPage() {
                     <dt>Types</dt>
                     <dd>TypeScript 5.0+</dd>
                   </div>
+                  <div>
+                    <dt>License</dt>
+                    <dd>MIT · commercial and non-commercial use</dd>
+                  </div>
                 </dl>
               </div>
 
@@ -328,7 +308,7 @@ export function DocsPage() {
                   <div>
                     <span className="code-language-badge">TypeScript / JavaScript</span>
                     <h2>Quick start</h2>
-                    <p>Describe your cards, seed the deck, and ask one exact question.</p>
+                    <p>Copy and run a complete ten-card example with one exact question.</p>
                   </div>
                   <CopyCodeButton text={quickStartCode} />
                 </div>

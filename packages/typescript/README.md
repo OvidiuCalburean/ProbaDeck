@@ -2,9 +2,11 @@
 
 Deterministic deck simulation and explainable exact probabilities for partially known card decks.
 
-```sh
-pnpm add probadeck
-```
+ProbaDeck is available under the MIT License. The package is release-ready but has not been
+published to npm yet. From a repository clone, `pnpm pack:package` creates
+`artifacts/probadeck-1.0.0.tgz`; install that tarball from your project with
+`pnpm add /path/to/ProbaDeck/artifacts/probadeck-1.0.0.tgz`. Once published, installation will be
+`pnpm add probadeck`.
 
 ```ts
 import { createDeck, createSeededRandom, probabilityWithinDraws, shuffleDeck } from "probadeck";

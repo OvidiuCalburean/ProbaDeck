@@ -84,4 +84,4 @@ No probability may be approximated. Hidden operations that would exceed the defa
 - Card values and configuration callbacks are treated as immutable and pure after ingestion.
 - V1 models one observer; audit access is privileged inspection rather than a security boundary.
 - Arbitrary relational constraints, multi-observer knowledge, approximate inference, dispersed batch placement, and a mutable convenience API are deferred.
-- Publishing to npm and choosing a repository license are outside implementation scope; the package will be release-ready but not published automatically.
+- The repository is MIT licensed. Publishing the release-ready package to npm remains an explicit release action rather than an automatic side effect of CI.

@@ -18,14 +18,23 @@ for future Rust, Python, Go, and other implementations.
 - Explicit failure when an operation cannot remain exact or would exceed the configured hypothesis
   limit; ProbaDeck never silently approximates.
 
-## Install and runtime support
+## License, installation, and runtime support
 
-The package is named `probadeck`. It is release-ready but this repository does not publish it
-automatically.
+ProbaDeck is open-source software available under the [MIT License](LICENSE). Anyone may use,
+modify, distribute, sublicense, or sell software built with it under the license terms.
+
+The package is named `probadeck` and is release-ready, but it has not been published to npm yet.
+Until the first public release, build and verify the same installable tarball from a clone:
 
 ```sh
-pnpm add probadeck
+pnpm install
+pnpm pack:package
 ```
+
+This creates `artifacts/probadeck-1.0.0.tgz`. Install that tarball from another project with
+`pnpm add /path/to/ProbaDeck/artifacts/probadeck-1.0.0.tgz`. `pnpm test:package` independently packs
+the library into a temporary directory, installs it in a clean consumer, and runs a smoke test.
+Once the package is published, installation will be `pnpm add probadeck`.
 
 The v1 package targets ES2022 ESM, Node.js 22.12 or newer, evergreen browsers, and TypeScript 5.0 or
 newer. CommonJS is not supported.
@@ -152,7 +161,7 @@ non-serializable source needs a replacement source before subsequent random oper
 
 ## Repository and development
 
-- `packages/typescript` — the TypeScript package published as `probadeck`
+- `packages/typescript` — the release-ready TypeScript package named `probadeck`
 - `examples/showcase` — the React/Vite interactive visualization using the workspace package
 - `spec` — the normative language-independent v1 contract and JSON Schemas
 - `conformance` — portable cross-language scenarios and expected exact results
@@ -181,5 +190,5 @@ Stress failures include a fast-check seed and shrink path. Reproduce one exactly
 state-machine budgets beyond the pull-request suite.
 
 See the [v1 specification](spec/v1.md), [conformance guide](conformance/README.md), and
-[saved implementation plan](spec/implementation-plan.md). Npm publication and the repository
-license remain explicit follow-up decisions.
+[saved implementation plan](spec/implementation-plan.md). The repository is MIT licensed; the
+first npm publication remains an explicit release action.

@@ -11,6 +11,7 @@ import {
   getActiveCards,
   getAuditLog,
   getDrawnCards,
+  getKnowledgeComplexity,
   getObserverLog,
   insertCards,
   moveCards,
@@ -38,6 +39,7 @@ const documentedRuntimeExports = [
   "createDeck",
   "getActiveCards",
   "getDrawnCards",
+  "getKnowledgeComplexity",
   "shuffleDeck",
   "insertCards",
   "moveCards",
@@ -138,6 +140,19 @@ const documentationExamples = {
 
     expect(drawnCards).toHaveLength(2);
     expect(drawnCards.map((instance) => instance.card)).toEqual(shape.cards.slice(0, 2));
+  },
+
+  getKnowledgeComplexity: <TCard>(shape: DeckShape<TCard>) => {
+    const initial = initialDeck(shape);
+    const complexity = getKnowledgeComplexity(initial);
+
+    expect(complexity).toEqual({
+      hypothesisCount: 1,
+      maxHypotheses: 10_000,
+      remainingCapacity: 9_999,
+      utilization: 0.0001,
+    });
+    expect(Object.isFrozen(complexity)).toBe(true);
   },
 
   shuffleDeck: <TCard>(shape: DeckShape<TCard>) => {

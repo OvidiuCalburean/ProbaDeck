@@ -1,5 +1,6 @@
 import { CaretDown, Eye, Lock, Warning } from "@phosphor-icons/react";
 import { useState } from "react";
+import { getKnowledgeComplexity } from "probadeck";
 
 import { getPrivilegedOrder } from "../scenarios/session.js";
 import type { ScenarioSession } from "../scenarios/types.js";
@@ -11,6 +12,7 @@ interface ObserverBarProps {
 export function ObserverBar({ session }: ObserverBarProps) {
   const [showPrivileged, setShowPrivileged] = useState(false);
   const revealed = session.zones.hand.length + session.zones.community.length;
+  const complexity = getKnowledgeComplexity(session.deck);
   const privileged = showPrivileged ? getPrivilegedOrder(session).slice(0, 8) : [];
 
   return (
@@ -26,6 +28,11 @@ export function ObserverBar({ session }: ObserverBarProps) {
           <span>{session.deck.length} active positions</span>
           <i aria-hidden="true">·</i>
           <span>hidden random outcomes remain undisclosed</span>
+          <i aria-hidden="true">·</i>
+          <span>
+            {complexity.hypothesisCount.toLocaleString()} /{" "}
+            {complexity.maxHypotheses.toLocaleString()} exact hypotheses
+          </span>
         </p>
         <button
           aria-expanded={showPrivileged}

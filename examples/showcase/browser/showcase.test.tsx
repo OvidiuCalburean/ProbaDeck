@@ -60,8 +60,17 @@ describe("showcase browser interactions", () => {
   it("deals the Texas turn and switches to the tournament-winning Magic deck", async () => {
     expect(document.body.textContent).toContain("47");
     expect(document.body.textContent).toContain("1/47");
+    expect(document.body.textContent).toContain("1 / 10,000 exact hypotheses");
+    expect(document.body.textContent).toContain("Which card could be at the top now?");
     expect(document.body.textContent).not.toContain("Move top card to bottom");
     expect(document.body.textContent).not.toContain("Every number is a ProbaDeck result.");
+
+    await click("At draw N");
+    expect(document.body.textContent).toContain("Probabilities for the card at draw 1");
+    expect(document.body.textContent).toContain("specifically at 1-based draw 1");
+    await click("In next N");
+    expect(document.body.textContent).toContain("At-least-once probabilities in the next 1 card");
+    expect(document.body.textContent).toContain("at least once among the next 1 card");
 
     const initialDeal = Array.from(
       document.querySelectorAll<HTMLImageElement>(".card-face img"),
@@ -123,6 +132,13 @@ describe("showcase browser interactions", () => {
     );
     expect(document.body.textContent).toContain("Three examples. Any deck-driven system.");
     expect(document.body.textContent).toContain("These are familiar reference implementations");
+    expect(document.body.textContent).toContain("Have an idea ProbaDeck does not cover yet?");
+    expect(document.querySelector('a[href$="/issues/new"]')?.textContent).toContain(
+      "Open an issue",
+    );
+    expect(document.querySelector('a[href$="/pulls"]')?.textContent).toContain(
+      "View pull requests",
+    );
 
     window.history.replaceState({}, "", "/docs");
     await act(async () => root.render(<App />));
@@ -131,7 +147,7 @@ describe("showcase browser interactions", () => {
     expect(document.body.textContent).toContain("Portable implementation targets");
     expect(document.body.textContent).toContain("Choose your implementation");
     expect(document.body.textContent).toContain("SDK-authentic code");
-    expect(document.querySelectorAll("[data-code-language='typescript']")).toHaveLength(22);
+    expect(document.querySelectorAll("[data-code-language='typescript']")).toHaveLength(23);
     expect(
       document.querySelector<HTMLButtonElement>(".docs-language-tabs .is-current")?.disabled,
     ).toBe(false);
@@ -154,6 +170,7 @@ describe("showcase browser interactions", () => {
         "getActiveCards",
         "getAuditLog",
         "getDrawnCards",
+        "getKnowledgeComplexity",
         "getObserverLog",
         "insertCards",
         "moveCards",
@@ -168,9 +185,9 @@ describe("showcase browser interactions", () => {
         "shuffleDeck",
       ]),
     );
-    expect(document.querySelectorAll("[data-api-symbol] .reference-code")).toHaveLength(20);
+    expect(document.querySelectorAll("[data-api-symbol] .reference-code")).toHaveLength(21);
     expect(document.body.textContent).toContain("Usage example");
-    expect(document.querySelectorAll("[data-api-type]")).toHaveLength(46);
+    expect(document.querySelectorAll("[data-api-type]")).toHaveLength(47);
     expect(document.querySelectorAll("[data-error-code]")).toHaveLength(20);
 
     window.history.replaceState({}, "", "/examples#magic");

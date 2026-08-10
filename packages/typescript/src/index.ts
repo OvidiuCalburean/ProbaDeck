@@ -5,6 +5,7 @@ export {
   getActiveCards,
   getAuditLog,
   getDrawnCards,
+  getKnowledgeComplexity,
   getObserverLog,
   insertCards,
   moveCards,

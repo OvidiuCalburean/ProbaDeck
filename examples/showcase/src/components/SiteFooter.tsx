@@ -28,6 +28,13 @@ export function SiteFooter({ variant = "project" }: SiteFooterProps) {
       <nav aria-label="Footer navigation">
         <a href="/examples">Examples</a>
         <a href="/docs">Docs</a>
+        <a
+          href="https://github.com/OvidiuCalburean/ProbaDeck/blob/main/LICENSE"
+          target="_blank"
+          rel="noreferrer"
+        >
+          MIT License <ArrowSquareOut aria-hidden="true" />
+        </a>
         {variant === "examples" ? (
           <>
             <a href="https://scryfall.com/docs/api" target="_blank" rel="noreferrer">

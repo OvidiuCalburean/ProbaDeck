@@ -35,6 +35,13 @@ export interface Deck<TCard> {
   readonly maxHypotheses: number;
 }
 
+export interface KnowledgeComplexity {
+  readonly hypothesisCount: number;
+  readonly maxHypotheses: number;
+  readonly remainingCapacity: number;
+  readonly utilization: number;
+}
+
 export interface RandomStep {
   readonly value: number;
   readonly next: RandomSource;

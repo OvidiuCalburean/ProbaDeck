@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -36,6 +36,9 @@ try {
       stdio: "inherit",
     },
   );
+  if (!existsSync(join(temporaryDirectory, "node_modules", "probadeck", "LICENSE"))) {
+    throw new Error("The packed package did not include the MIT license.");
+  }
   writeFileSync(
     join(temporaryDirectory, "consumer.mjs"),
     `import { createDeck, createSeededRandom, probabilityOfNext, shuffleDeck } from "probadeck";

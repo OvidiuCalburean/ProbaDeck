@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import type { ProbabilityQuery } from "probadeck";
 
 import type { ProbabilityRow, ProbabilityView, ScenarioSession } from "../scenarios/types.js";
+import { explainProbability } from "../scenarios/explanation.js";
 
 interface ProbabilityLedgerProps {
   readonly session: ScenarioSession;
@@ -20,14 +21,44 @@ function assertNever(value: never): never {
   throw new Error(`Unsupported probability query: ${JSON.stringify(value)}`);
 }
 
+function cardCountLabel(count: number): string {
+  return `${count} ${count === 1 ? "card" : "cards"}`;
+}
+
 function queryLabel(query: ProbabilityQuery): string {
   switch (query.kind) {
     case "next":
       return "Next card";
     case "at-draw":
-      return `Exact draw ${query.drawNumber}`;
+      return `Card at draw ${query.drawNumber}`;
     case "within-draws":
-      return `Within ${query.drawCount} draws`;
+      return `At least once in next ${cardCountLabel(query.drawCount)}`;
+    default:
+      return assertNever(query);
+  }
+}
+
+function queryHeading(query: ProbabilityQuery): string {
+  switch (query.kind) {
+    case "next":
+      return "Next-card probabilities";
+    case "at-draw":
+      return `Probabilities for the card at draw ${query.drawNumber}`;
+    case "within-draws":
+      return `At-least-once probabilities in the next ${cardCountLabel(query.drawCount)}`;
+    default:
+      return assertNever(query);
+  }
+}
+
+function queryHelp(query: ProbabilityQuery): string {
+  switch (query.kind) {
+    case "next":
+      return "Which card could be at the top now?";
+    case "at-draw":
+      return `Which card could appear specifically at 1-based draw ${query.drawNumber}? Earlier draws are not assumed to miss.`;
+    case "within-draws":
+      return `What is the chance of seeing each card at least once among the next ${cardCountLabel(query.drawCount)}?`;
     default:
       return assertNever(query);
   }
@@ -61,6 +92,8 @@ export function ProbabilityLedger({ session, view, onQueryChange }: ProbabilityL
         first.exact.numerator * row.exact.denominator,
     );
   const explained = view.rows.find((row) => row.card.name === explainedCard);
+  const explanationSteps =
+    explained === undefined ? [] : explainProbability(explained.explanation, explained.percentage);
   const countValue =
     view.query.kind === "at-draw"
       ? view.query.drawNumber
@@ -72,7 +105,7 @@ export function ProbabilityLedger({ session, view, onQueryChange }: ProbabilityL
     <aside className="probability-ledger" aria-labelledby="probability-title">
       <div className="ledger-heading">
         <span className="eyebrow">Exact probability ledger</span>
-        <h2 id="probability-title">{queryLabel(view.query)} probabilities</h2>
+        <h2 id="probability-title">{queryHeading(view.query)}</h2>
       </div>
 
       <div className="query-controls" aria-label="Probability query">
@@ -81,14 +114,14 @@ export function ProbabilityLedger({ session, view, onQueryChange }: ProbabilityL
           type="button"
           onClick={() => onQueryChange({ kind: "next" })}
         >
-          Next
+          Next card
         </button>
         <button
           className={view.query.kind === "at-draw" ? "is-active" : ""}
           type="button"
           onClick={() => onQueryChange({ kind: "at-draw", drawNumber: countValue })}
         >
-          Exact draw
+          At draw N
         </button>
         <button
           className={view.query.kind === "within-draws" ? "is-active" : ""}
@@ -97,7 +130,7 @@ export function ProbabilityLedger({ session, view, onQueryChange }: ProbabilityL
             onQueryChange({ kind: "within-draws", drawCount: Math.max(1, countValue) })
           }
         >
-          Within draws
+          In next N
         </button>
         {view.query.kind === "next" ? null : (
           <label className="query-count">
@@ -120,6 +153,7 @@ export function ProbabilityLedger({ session, view, onQueryChange }: ProbabilityL
           </label>
         )}
       </div>
+      <p className="query-hint">{queryHelp(view.query)}</p>
 
       <div className="probability-highlight">
         {view.classifier === null ? (
@@ -187,19 +221,12 @@ export function ProbabilityLedger({ session, view, onQueryChange }: ProbabilityL
 
       {explained === undefined ? null : (
         <div className="explanation-card">
-          <strong>Why {explained.exactLabel}?</strong>
-          <span>
-            {
-              explained.explanation.matchingInstances.filter((item) => item.reason === "candidate")
-                .length
-            }{" "}
-            candidate copies ·{" "}
-            {
-              explained.explanation.matchingInstances.filter((item) => item.reason === "drawn")
-                .length
-            }{" "}
-            drawn · formula {explained.explanation.formula.kind}
-          </span>
+          <strong>How ProbaDeck got {explained.exactLabel}</strong>
+          <ol>
+            {explanationSteps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
         </div>
       )}
 

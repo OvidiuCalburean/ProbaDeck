@@ -662,6 +662,14 @@ pre {
   color: #fff;
 }
 
+.query-hint {
+  min-height: 28px;
+  margin: -7px 0 12px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
 .query-count {
   display: flex;
   align-items: center;
@@ -781,18 +789,26 @@ button.probability-row.is-explained {
 }
 
 .explanation-card {
-  padding: 10px 12px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 7px;
   border: 1px solid rgb(13 125 123 / 28%);
   border-top: 0;
   background: rgb(13 125 123 / 6%);
   font-size: 10px;
 }
 
-.explanation-card span {
+.explanation-card ol {
+  margin: 0;
+  padding-left: 17px;
+  display: grid;
+  gap: 4px;
+}
+
+.explanation-card li {
   color: var(--muted);
+  line-height: 1.45;
 }
 
 .view-all {
@@ -1280,7 +1296,8 @@ button.probability-row.is-explained {
 .section-heading h2,
 .knowledge-intro h2,
 .capabilities-layout > div > h2,
-.language-callout h2 {
+.language-callout h2,
+.community-callout h2 {
   font-size: clamp(32px, 3.1vw, 46px);
   line-height: 1.05;
 }
@@ -1576,6 +1593,55 @@ button.probability-row.is-explained {
   line-height: 1.6;
 }
 
+.community-callout {
+  padding: clamp(52px, 6vw, 78px) 0;
+  background: var(--black);
+  color: #f9f9f7;
+}
+
+.community-callout-inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(24px, 3vw, 42px);
+}
+
+.community-callout-inner > svg {
+  color: #7fd0cc;
+}
+
+.community-callout h2 {
+  max-width: 720px;
+  font-size: clamp(28px, 2.6vw, 40px);
+}
+
+.community-callout p {
+  max-width: 720px;
+  margin: 13px 0 0;
+  color: #c8c8c3;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.community-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.community-button--secondary {
+  border-color: #5b6160;
+  background: transparent;
+  color: #f9f9f7;
+}
+
+.community-button--secondary:hover:not(:disabled) {
+  border-color: #8c9290;
+  background: #292e2e;
+  color: #fff;
+}
+
 .docs-main {
   border-bottom: 1px solid var(--line);
 }
@@ -1804,6 +1870,15 @@ button.probability-row.is-explained {
   margin: 24px 0 28px;
   font-size: 16px;
   line-height: 1.6;
+}
+
+.docs-intro > .install-status {
+  margin: -12px 0 14px;
+  padding-left: 11px;
+  border-left: 3px solid var(--teal);
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
 }
 
 .install-command {
@@ -2881,7 +2956,8 @@ button.probability-row.is-explained {
   .section-heading h2,
   .knowledge-intro h2,
   .capabilities-layout > div > h2,
-  .language-callout h2 {
+  .language-callout h2,
+  .community-callout h2 {
     font-size: 32px;
   }
 
@@ -2944,6 +3020,14 @@ button.probability-row.is-explained {
 
   .language-callout-inner .button {
     grid-column: auto;
+  }
+
+  .community-callout-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .community-actions {
+    justify-content: flex-start;
   }
 
   .docs-sidebar {
