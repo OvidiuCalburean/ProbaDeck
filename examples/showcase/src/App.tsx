@@ -1,177 +1,28 @@
-import { ArrowSquareOut } from "@phosphor-icons/react";
-import { useEffect, useMemo, useState } from "react";
-import type { ProbabilityQuery } from "probadeck";
+import { useEffect } from "react";
 
-import { AppHeader } from "./components/AppHeader.js";
-import { EventTimeline } from "./components/EventTimeline.js";
-import { ObserverBar } from "./components/ObserverBar.js";
-import { ProbabilityLedger } from "./components/ProbabilityLedger.js";
-import { ScenarioBoard } from "./components/ScenarioBoard.js";
-import { ScenarioTabs } from "./components/ScenarioTabs.js";
-import {
-  applyScenarioAction,
-  createScenarioSession,
-  getProbabilityView,
-} from "./scenarios/session.js";
-import type {
-  ReturnPlacement,
-  ScenarioAction,
-  ScenarioId,
-  ScenarioSession,
-} from "./scenarios/types.js";
+import { DocsPage } from "./pages/DocsPage.js";
+import { ExamplesPage } from "./pages/ExamplesPage.js";
+import { HomePage } from "./pages/HomePage.js";
 
-function createSessions(): Readonly<Record<ScenarioId, ScenarioSession>> {
-  return {
-    holdem: createScenarioSession("holdem", 42n),
-    magic: createScenarioSession("magic", 42n),
-    yugioh: createScenarioSession("yugioh", 42n),
-  };
+function routeForPath(pathname: string) {
+  if (pathname === "/docs" || pathname.startsWith("/docs/")) return "docs";
+  if (pathname === "/examples" || pathname.startsWith("/examples/")) return "examples";
+  return "home";
 }
 
 export function App() {
-  const [activeId, setActiveId] = useState<ScenarioId>("holdem");
-  const [sessions, setSessions] = useState(createSessions);
-  const [query, setQuery] = useState<ProbabilityQuery>({ kind: "next" });
-  const [selectedInstanceId, setSelectedInstanceId] = useState<string | null>(null);
-  const [returnPlacement, setReturnPlacement] = useState<ReturnPlacement>({ kind: "top" });
-  const [notice, setNotice] = useState<string | null>(null);
-  const session = sessions[activeId];
-  const probabilityView = useMemo(() => getProbabilityView(session, query), [query, session]);
+  const route = routeForPath(window.location.pathname);
 
   useEffect(() => {
-    if (session.id === "holdem") {
-      setSelectedInstanceId(null);
-      return;
-    }
-    const selectedStillExists = session.zones.hand.some(
-      (instance) => instance.instanceId === selectedInstanceId,
-    );
-    if (!selectedStillExists) {
-      setSelectedInstanceId(session.zones.hand[0]?.instanceId ?? null);
-    }
-  }, [selectedInstanceId, session]);
+    const titles = {
+      docs: "Docs — ProbaDeck",
+      examples: "Interactive examples — ProbaDeck",
+      home: "ProbaDeck — Exact probability for partially known decks",
+    } as const;
+    document.title = titles[route];
+  }, [route]);
 
-  function runAction(action: ScenarioAction) {
-    setSessions((current) => {
-      try {
-        const next = applyScenarioAction(current[activeId], action);
-        setNotice(next.events.at(-1)?.detail ?? null);
-        return { ...current, [activeId]: next };
-      } catch (error) {
-        setNotice(error instanceof Error ? error.message : String(error));
-        return current;
-      }
-    });
-  }
-
-  function resetActiveScenario() {
-    setSessions((current) => {
-      const nextSeed = current[activeId].seed + 1n;
-      return {
-        ...current,
-        [activeId]: createScenarioSession(activeId, nextSeed),
-      };
-    });
-    setQuery({ kind: "next" });
-    setSelectedInstanceId(null);
-    setReturnPlacement({ kind: "top" });
-    setNotice("Deck reshuffled and opening cards redealt.");
-  }
-
-  return (
-    <div className="app-shell" id="top">
-      <AppHeader />
-      <main>
-        <ScenarioTabs
-          activeId={activeId}
-          onChange={(id) => {
-            setActiveId(id);
-            setQuery({ kind: "next" });
-            setNotice(null);
-          }}
-        />
-
-        <div
-          className="scenario-layout"
-          id={`panel-${activeId}`}
-          role="tabpanel"
-          aria-labelledby={`tab-${activeId}`}
-        >
-          <ScenarioBoard
-            session={session}
-            selectedInstanceId={selectedInstanceId}
-            returnPlacement={returnPlacement}
-            onSelectCard={setSelectedInstanceId}
-            onPlacementChange={setReturnPlacement}
-            onDraw={() => runAction({ kind: "draw" })}
-            onReturnCard={() => {
-              if (selectedInstanceId === null) return;
-              runAction({
-                kind: "return-card",
-                instanceId: selectedInstanceId,
-                placement: returnPlacement,
-              });
-            }}
-            onShuffle={() => runAction({ kind: "shuffle" })}
-            onReset={resetActiveScenario}
-          />
-          <ProbabilityLedger
-            key={activeId}
-            session={session}
-            view={probabilityView}
-            onQueryChange={setQuery}
-          />
-        </div>
-
-        <div className="notice" aria-live="polite">
-          {notice}
-        </div>
-        <ObserverBar key={`${activeId}-${session.seed.toString()}`} session={session} />
-        <EventTimeline events={session.events} />
-
-        {activeId === "magic" ? (
-          <section className="typescript-strip" id="typescript">
-            <div>
-              <span className="eyebrow">The calculation behind the interface</span>
-              <h2>Every number is a ProbaDeck result.</h2>
-              <p>
-                External card services provide only names, types, and images. The immutable deck
-                state, seeded randomness, observer knowledge, exact fraction, and explanation all
-                come from the TypeScript library.
-              </p>
-            </div>
-            <pre aria-label="TypeScript example">
-              <code>{`const result = probabilityOfNext(deck, {
-  kind: "classifier",
-  classifier: "type",
-  value: "Land",
-});
-
-result.exact;       // { numerator, denominator }
-result.explanation; // structured proof`}</code>
-            </pre>
-          </section>
-        ) : null}
-      </main>
-
-      <footer>
-        <p>
-          Non-commercial demonstration. Magic: The Gathering card data and images via Scryfall.
-          Yu-Gi-Oh! data and locally cached images via YGOPRODeck. Standard card faces via Deck of
-          Cards API. All trademarks and card artwork belong to their respective owners.
-        </p>
-        <div>
-          <a href="https://scryfall.com/docs/api" target="_blank" rel="noreferrer">
-            Scryfall <ArrowSquareOut aria-hidden="true" />
-          </a>
-          <a href="https://ygoprodeck.com/api-guide/" target="_blank" rel="noreferrer">
-            YGOPRODeck <ArrowSquareOut aria-hidden="true" />
-          </a>
-          <a href="https://deckofcardsapi.com/" target="_blank" rel="noreferrer">
-            Deck of Cards <ArrowSquareOut aria-hidden="true" />
-          </a>
-        </div>
-      </footer>
-    </div>
-  );
+  if (route === "docs") return <DocsPage />;
+  if (route === "examples") return <ExamplesPage />;
+  return <HomePage />;
 }

@@ -36,6 +36,7 @@ async function enterPosition(value: string) {
 }
 
 beforeEach(async () => {
+  window.history.replaceState({}, "", "/examples");
   document.body.innerHTML = '<div id="root"></div>';
   const container = document.querySelector<HTMLDivElement>("#root");
   if (container === null) throw new Error("Test root is missing");
@@ -73,7 +74,9 @@ describe("showcase browser interactions", () => {
     expect(document.body.textContent).toContain("Dealt the turn");
 
     await click("Magic");
-    expect(document.querySelector('nav[aria-label="Project links"]')?.textContent).toBe("Docs");
+    expect(document.querySelector('nav[aria-label="Primary navigation"]')?.textContent).toBe(
+      "HomeExamplesDocs",
+    );
     expect(document.body.textContent).toContain("Nathan Steuer");
     expect(document.body.textContent).toContain("Land classifier");
     expect(document.body.textContent).toContain("Every number is a ProbaDeck result.");
@@ -104,5 +107,66 @@ describe("showcase browser interactions", () => {
 
     await click("Magic");
     expect(document.body.textContent).toContain("7 revealed cards");
+  });
+
+  it("routes between the project home, documentation, and examples", async () => {
+    window.history.replaceState({}, "", "/");
+    await act(async () => root.render(<App />));
+    expect(document.body.textContent).toContain(
+      "Exact probabilities for decks you only partly know.",
+    );
+    expect(document.body.textContent).toContain("Three examples. Any deck-driven system.");
+    expect(document.body.textContent).toContain("These are familiar reference implementations");
+
+    window.history.replaceState({}, "", "/docs");
+    await act(async () => root.render(<App />));
+    expect(document.body.textContent).toContain("Build deck probability you can explain.");
+    expect(document.body.textContent).toContain("TypeScript / JavaScript");
+    expect(document.body.textContent).toContain("Portable implementation targets");
+    expect(document.body.textContent).toContain("Choose your implementation");
+    expect(document.body.textContent).toContain("SDK-authentic code");
+    expect(document.querySelectorAll("[data-code-language='typescript']")).toHaveLength(22);
+    expect(
+      document.querySelector<HTMLButtonElement>(".docs-language-tabs .is-current")?.disabled,
+    ).toBe(false);
+    expect(
+      document.querySelectorAll<HTMLButtonElement>(".docs-language-tabs button:disabled"),
+    ).toHaveLength(3);
+
+    const runtimeSymbols = Array.from(document.querySelectorAll<HTMLElement>("[data-api-symbol]"))
+      .map((element) => element.dataset.apiSymbol)
+      .sort();
+    expect(runtimeSymbols).toEqual(
+      [
+        "Pcg32Random",
+        "ProbaDeckError",
+        "createDeck",
+        "createSeededRandom",
+        "drawCards",
+        "getActiveCards",
+        "getAuditLog",
+        "getDrawnCards",
+        "getObserverLog",
+        "insertCards",
+        "moveCards",
+        "observe",
+        "probabilityAtDraw",
+        "probabilityOfNext",
+        "probabilityWithinDraws",
+        "replayEventLog",
+        "restoreSnapshot",
+        "serializeEventLog",
+        "serializeSnapshot",
+        "shuffleDeck",
+      ].sort(),
+    );
+    expect(document.querySelectorAll("[data-api-symbol] .reference-code")).toHaveLength(20);
+    expect(document.body.textContent).toContain("Usage example");
+    expect(document.querySelectorAll("[data-api-type]")).toHaveLength(46);
+    expect(document.querySelectorAll("[data-error-code]")).toHaveLength(20);
+
+    window.history.replaceState({}, "", "/examples#magic");
+    await act(async () => root.render(<App />));
+    expect(document.body.textContent).toContain("Nathan Steuer");
   });
 });
