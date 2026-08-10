@@ -171,7 +171,14 @@ Useful commands:
 - `pnpm test:browser` — run the ESM simulation smoke test in real Chromium
 - `pnpm test:package` — pack the tarball, install it into a clean consumer, and execute it
 - `pnpm test:property` — run exhaustive and property-based verification
+- `pnpm test:stress` — run 500 generated, deterministic mixed-operation histories (up to 80
+  commands each) with snapshot/replay checks
 - `pnpm lint` / `pnpm format` — run Oxlint or apply Oxfmt
+
+Stress failures include a fast-check seed and shrink path. Reproduce one exactly with
+`PROBADECK_STRESS_SEED=<seed> PROBADECK_STRESS_PATH=<path> pnpm test:stress`; tune volume with
+`PROBADECK_STRESS_RUNS` and `PROBADECK_STRESS_COMMANDS`. Scheduled CI raises both the property and
+state-machine budgets beyond the pull-request suite.
 
 See the [v1 specification](spec/v1.md), [conformance guide](conformance/README.md), and
 [saved implementation plan](spec/implementation-plan.md). Npm publication and the repository

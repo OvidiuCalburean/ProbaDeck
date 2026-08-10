@@ -26,6 +26,7 @@
     "test:browser": "vitest run --config vitest.browser.config.ts",
     "test:coverage": "vitest run --coverage",
     "test:property": "vitest run test/property.test.ts",
+    "test:stress": "vitest run test/stress.test.ts",
     "typecheck": "tsc --build --force"
   },
   "engines": {

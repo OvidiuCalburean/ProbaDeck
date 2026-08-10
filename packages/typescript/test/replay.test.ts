@@ -157,6 +157,38 @@ describe("event replay", () => {
     expect(prefix.revision).toBe(2);
   });
 
+  it("replays revealed index moves when the requested indices are unsorted", () => {
+    let deck = createDeck({
+      cards: [{ name: "original", group: "other" }],
+      config,
+      random: createSeededRandom({ seed: 0n }),
+    });
+    deck = insertCards(deck, {
+      items: [{ kind: "new", card: { name: "inserted", group: "target" } }],
+      placement: { kind: "index", index: 0 },
+      visibility: "hidden",
+    }).deck;
+    deck = moveCards(deck, {
+      selection: { kind: "indices", indices: [1, 0] },
+      placement: { kind: "index", index: 0 },
+      visibility: "revealed",
+    }).deck;
+    const top = getActiveCards(deck)[0];
+    if (top === undefined) {
+      throw new Error("Expected a top card after moving the complete deck.");
+    }
+    deck = observe(deck, {
+      location: { zone: "active", index: 0 },
+      evidence: { kind: "instance", instanceId: top.instanceId },
+    }).deck;
+
+    const replayed = replayEventLog(serializeEventLog(deck, codec), { config, codec });
+
+    expect(getActiveCards(replayed)).toEqual(getActiveCards(deck));
+    expect(getDrawnCards(replayed)).toEqual(getDrawnCards(deck));
+    expect(replayed.revision).toBe(deck.revision);
+  });
+
   it("rejects a tampered schema and an invalid replay prefix", () => {
     const deck = createDeck({ cards: [{ name: "a", group: "other" }], config });
     const log = serializeEventLog(deck, codec);

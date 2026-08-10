@@ -18,6 +18,7 @@
     "test:browser": "pnpm --filter probadeck test:browser && pnpm --filter @probadeck/showcase test:browser",
     "test:package": "node scripts/package-smoke-test.mjs",
     "test:property": "pnpm --filter probadeck test:property",
+    "test:stress": "node scripts/run-stress-tests.mjs",
     "test:coverage": "pnpm --filter probadeck test:coverage",
     "test:types:minimum": "node node_modules/typescript-5-0/lib/tsc.js -p packages/typescript/tsconfig.consumer.json",
     "typecheck": "pnpm --filter probadeck typecheck",

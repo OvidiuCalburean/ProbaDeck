@@ -398,7 +398,7 @@ function replayMove<TCard>(deck: InternalDeck<TCard>, event: AuditEvent): Intern
         selection.kind === "indices"
           ? moveKnowledgeByIndices(
               deck.knowledge,
-              selection.indices,
+              sourceIndices,
               possibleGap,
               order === "random",
               deck.maxHypotheses,
@@ -416,8 +416,8 @@ function replayMove<TCard>(deck: InternalDeck<TCard>, event: AuditEvent): Intern
     );
   } else if (selection.kind === "indices") {
     let conditioned = deck.knowledge;
-    selection.indices.forEach((index, offset) => {
-      const instanceId = idsAtIndices(deck.active, selection.indices)[offset];
+    sourceIndices.forEach((index, offset) => {
+      const instanceId = sourceIds[offset];
       /* v8 ignore next -- forEach offsets are bounded by the same selected ID array */
       if (instanceId === undefined) {
         throw new Error("A replayed move is missing a selected ID.");
@@ -430,9 +430,8 @@ function replayMove<TCard>(deck: InternalDeck<TCard>, event: AuditEvent): Intern
         deck.maxHypotheses,
       );
     });
-    const selectedIds = idsAtIndices(deck.active, selection.indices);
     const offsets = appliedIds.map((instanceId) => {
-      const offset = selectedIds.indexOf(instanceId);
+      const offset = sourceIds.indexOf(instanceId);
       /* v8 ignore next -- applied IDs were verified as the same set as the selected source IDs */
       if (offset === -1) {
         fail("REPLAY_DIVERGENCE", "Revealed move order contains an unknown source instance.");
@@ -441,7 +440,7 @@ function replayMove<TCard>(deck: InternalDeck<TCard>, event: AuditEvent): Intern
     });
     knowledge = moveKnowledgeByIndicesOrdered(
       conditioned,
-      selection.indices,
+      sourceIndices,
       gap,
       offsets,
       deck.maxHypotheses,

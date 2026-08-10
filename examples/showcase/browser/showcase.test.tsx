@@ -35,6 +35,12 @@ async function enterPosition(value: string) {
   return input;
 }
 
+function sortedStrings(values: readonly string[]): readonly string[] {
+  const copy = [...values];
+  // eslint-disable-next-line unicorn/no-array-sort -- ES2022 lacks toSorted; this sorts a fresh copy.
+  return copy.sort((left, right) => left.localeCompare(right));
+}
+
 beforeEach(async () => {
   window.history.replaceState({}, "", "/examples");
   document.body.innerHTML = '<div id="root"></div>';
@@ -133,11 +139,13 @@ describe("showcase browser interactions", () => {
       document.querySelectorAll<HTMLButtonElement>(".docs-language-tabs button:disabled"),
     ).toHaveLength(3);
 
-    const runtimeSymbols = Array.from(document.querySelectorAll<HTMLElement>("[data-api-symbol]"))
-      .map((element) => element.dataset.apiSymbol)
-      .sort();
+    const runtimeSymbols = sortedStrings(
+      Array.from(document.querySelectorAll<HTMLElement>("[data-api-symbol]")).map(
+        (element) => element.dataset.apiSymbol ?? "",
+      ),
+    );
     expect(runtimeSymbols).toEqual(
-      [
+      sortedStrings([
         "Pcg32Random",
         "ProbaDeckError",
         "createDeck",
@@ -158,7 +166,7 @@ describe("showcase browser interactions", () => {
         "serializeEventLog",
         "serializeSnapshot",
         "shuffleDeck",
-      ].sort(),
+      ]),
     );
     expect(document.querySelectorAll("[data-api-symbol] .reference-code")).toHaveLength(20);
     expect(document.body.textContent).toContain("Usage example");

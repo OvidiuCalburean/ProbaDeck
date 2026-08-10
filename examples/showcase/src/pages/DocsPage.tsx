@@ -114,8 +114,12 @@ function CopyCodeButton({ text }: { readonly text: string }) {
     }
   }
 
+  function handleCopyClick() {
+    void copy();
+  }
+
   return (
-    <button className="copy-button" type="button" onClick={copy} aria-label="Copy code">
+    <button className="copy-button" type="button" onClick={handleCopyClick} aria-label="Copy code">
       {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
       <span>{copied ? "Copied" : "Copy"}</span>
     </button>

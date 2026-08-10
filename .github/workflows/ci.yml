@@ -69,9 +69,9 @@ jobs:
       - name: Run browser and package verification
         run: pnpm test:browser && pnpm test:package
 
-  nightly-property:
+  nightly-stress:
     if: github.event_name == 'schedule'
-    name: Extended property verification
+    name: Extended generative stress verification
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -91,7 +91,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run extended property tests
-        run: pnpm test:property
+      - name: Run extended property and state-machine tests
+        run: pnpm test:property && pnpm test:stress
         env:
-          PROBADECK_PROPERTY_RUNS: 250
+          PROBADECK_PROPERTY_RUNS: 500
+          PROBADECK_STRESS_RUNS: 1000
+          PROBADECK_STRESS_COMMANDS: 100
