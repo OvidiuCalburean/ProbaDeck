@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "probadeck.conformance/v1",
+  "id": "hidden-random-insertion",
+  "requirements": ["PD-KNOW-005", "PD-OP-003", "PD-POS-005", "PD-VIS-002"],
+  "definition": { "cardKey": "/name" },
+  "cards": [
+    { "instanceId": "base-a", "card": { "name": "a" } },
+    { "instanceId": "base-b", "card": { "name": "b" } }
+  ],
+  "commands": [
+    {
+      "kind": "insert",
+      "items": [{ "kind": "new", "instanceId": "inserted", "card": { "name": "inserted" } }],
+      "placement": { "kind": "random-within", "startGap": 0, "endGap": 2 },
+      "visibility": "hidden",
+      "entropy": [2],
+      "expectObserver": { "appliedGap": null }
+    },
+    {
+      "kind": "probability-at-draw",
+      "target": { "kind": "instance", "instanceId": "inserted" },
+      "drawNumber": 2,
+      "expect": { "numerator": "1", "denominator": "3" }
+    }
+  ]
+}

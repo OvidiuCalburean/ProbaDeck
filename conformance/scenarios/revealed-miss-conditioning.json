@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "probadeck.conformance/v1",
+  "id": "revealed-miss-conditioning",
+  "requirements": ["PD-KNOW-005", "PD-OP-007", "PD-PROB-001", "PD-STATE-001"],
+  "definition": { "cardKey": "/name" },
+  "cards": [
+    { "instanceId": "target", "card": { "name": "target" } },
+    { "instanceId": "miss-1", "card": { "name": "miss-1" } },
+    { "instanceId": "miss-2", "card": { "name": "miss-2" } },
+    { "instanceId": "miss-3", "card": { "name": "miss-3" } }
+  ],
+  "commands": [
+    {
+      "kind": "shuffle-with-entropy-tape",
+      "visibility": "hidden",
+      "entropy": [4, 3, 2],
+      "expectAppliedOrder": ["miss-1", "miss-2", "miss-3", "target"],
+      "expectObserver": { "instanceIds": null }
+    },
+    {
+      "kind": "draw",
+      "count": 1,
+      "reveal": true,
+      "expectInstanceIds": ["miss-1"]
+    },
+    {
+      "kind": "probability-next",
+      "target": { "kind": "instance", "instanceId": "target" },
+      "expect": { "numerator": "1", "denominator": "3" }
+    },
+    {
+      "kind": "draw",
+      "count": 1,
+      "reveal": true,
+      "expectInstanceIds": ["miss-2"]
+    },
+    {
+      "kind": "probability-next",
+      "target": { "kind": "instance", "instanceId": "target" },
+      "expect": { "numerator": "1", "denominator": "2" }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "perf": "error",
+    "suspicious": "error"
+  },
+  "ignorePatterns": ["**/coverage/**", "**/dist/**"],
+  "options": {
+    "maxWarnings": 0,
+    "typeAware": true,
+    "typeCheck": true
+  },
+  "plugins": ["oxc", "typescript", "unicorn", "vitest"],
+  "rules": {
+    "eslint/eqeqeq": "error",
+    "typescript/await-thenable": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error"
+  }
+}

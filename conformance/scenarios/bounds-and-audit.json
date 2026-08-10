@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "probadeck.conformance/v1",
+  "id": "bounds-and-audit",
+  "requirements": ["PD-POS-002", "PD-POS-004", "PD-STATE-003", "PD-VIS-002"],
+  "definition": { "cardKey": "/name" },
+  "cards": [{ "instanceId": "base", "card": { "name": "base" } }],
+  "commands": [
+    {
+      "kind": "insert",
+      "items": [{ "kind": "new", "instanceId": "end", "card": { "name": "end" } }],
+      "placement": { "kind": "index", "index": 99 },
+      "bounds": "clamp",
+      "expect": { "appliedGap": 1, "referenceLength": 1, "wasClamped": true },
+      "expectObserver": { "appliedGap": 1, "referenceLength": 1, "wasClamped": true }
+    },
+    {
+      "kind": "insert",
+      "items": [{ "kind": "new", "instanceId": "rejected", "card": { "name": "rejected" } }],
+      "placement": { "kind": "index", "index": -1 },
+      "bounds": "error",
+      "expectError": "POSITION_OUT_OF_BOUNDS",
+      "expectRevision": 1
+    }
+  ]
+}

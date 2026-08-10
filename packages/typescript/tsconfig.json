@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "../..",
+    "tsBuildInfoFile": "../../node_modules/.cache/probadeck/typescript.tsbuildinfo",
+    "types": ["node", "vitest/globals"]
+  },
+  "include": [
+    "browser/**/*.ts",
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "vitest.browser.config.ts",
+    "vitest.config.ts"
+  ]
+}

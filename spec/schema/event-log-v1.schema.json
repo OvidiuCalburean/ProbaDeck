@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://probadeck.dev/schema/event-log-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "snapshot"],
+  "properties": {
+    "schemaVersion": { "const": "probadeck.events/v1" },
+    "snapshot": { "$ref": "snapshot-v1.schema.json" }
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "tournament": {
+    "archetype": "Sky Striker",
+    "event": "North America WCQ 2026",
+    "eventDate": "2026-07-11",
+    "pilot": "Ryan Yu",
+    "sourceUrl": "https://ygoprodeck.com/deck/sky-striker-721413"
+  },
+  "cards": [
+    {
+      "id": "59438930",
+      "name": "Ghost Ogre & Snow Rabbit",
+      "count": 2,
+      "typeLine": "Tuner Monster",
+      "imagePath": "/assets/cards/yugioh/ghost-ogre-snow-rabbit.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/59438930"
+    },
+    {
+      "id": "37351133",
+      "name": "Sky Striker Ace - Roze",
+      "count": 2,
+      "typeLine": "Effect Monster",
+      "imagePath": "/assets/cards/yugioh/sky-striker-ace-roze.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/37351133"
+    },
+    {
+      "id": "73642296",
+      "name": "Ghost Belle & Haunted Mansion",
+      "count": 1,
+      "typeLine": "Tuner Monster",
+      "imagePath": "/assets/cards/yugioh/ghost-belle-haunted-mansion.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/73642296"
+    },
+    {
+      "id": "94145021",
+      "name": "Droll & Lock Bird",
+      "count": 2,
+      "typeLine": "Effect Monster",
+      "imagePath": "/assets/cards/yugioh/droll-lock-bird.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/94145021"
+    },
+    {
+      "id": "26077387",
+      "name": "Sky Striker Ace - Raye",
+      "count": 3,
+      "typeLine": "Effect Monster",
+      "imagePath": "/assets/cards/yugioh/sky-striker-ace-raye.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/26077387"
+    },
+    {
+      "id": "14558127",
+      "name": "Ash Blossom & Joyous Spring",
+      "count": 3,
+      "typeLine": "Tuner Monster",
+      "imagePath": "/assets/cards/yugioh/ash-blossom-joyous-spring.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/14558127"
+    },
+    {
+      "id": "34433770",
+      "name": "Sky Striker Special Maneuver - Lemnisgate!",
+      "count": 2,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/sky-striker-special-maneuver-lemnisgate.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/34433770"
+    },
+    {
+      "id": "98829635",
+      "name": "Forbidden Crown",
+      "count": 2,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/forbidden-crown.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/98829635"
+    },
+    {
+      "id": "35261759",
+      "name": "Pot of Desires",
+      "count": 3,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/pot-of-desires.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/35261759"
+    },
+    {
+      "id": "25311006",
+      "name": "Triple Tactics Talent",
+      "count": 1,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/triple-tactics-talent.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/25311006"
+    },
+    {
+      "id": "9726840",
+      "name": "Sky Striker Mobilize - Linkage!",
+      "count": 3,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/sky-striker-mobilize-linkage.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/9726840"
+    },
+    {
+      "id": "30271097",
+      "name": "The Fallen & The Virtuous",
+      "count": 3,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/the-fallen-the-virtuous.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/30271097"
+    },
+    {
+      "id": "5318639",
+      "name": "Mystical Space Typhoon",
+      "count": 1,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/mystical-space-typhoon.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/5318639"
+    },
+    {
+      "id": "98338152",
+      "name": "Sky Striker Mecha - Widow Anchor",
+      "count": 3,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/sky-striker-mecha-widow-anchor.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/98338152"
+    },
+    {
+      "id": "32807846",
+      "name": "Reinforcement of the Army",
+      "count": 1,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/reinforcement-of-the-army.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/32807846"
+    },
+    {
+      "id": "51227866",
+      "name": "Sky Striker Mecha - Shark Cannon",
+      "count": 1,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/sky-striker-mecha-shark-cannon.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/51227866"
+    },
+    {
+      "id": "63166095",
+      "name": "Sky Striker Mobilize - Engage!",
+      "count": 3,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/sky-striker-mobilize-engage.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/63166095"
+    },
+    {
+      "id": "20508881",
+      "name": "Radiant Typhoon Vision",
+      "count": 3,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/radiant-typhoon-vision.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/20508881"
+    },
+    {
+      "id": "24224830",
+      "name": "Called by the Grave",
+      "count": 1,
+      "typeLine": "Spell Card",
+      "imagePath": "/assets/cards/yugioh/called-by-the-grave.jpg",
+      "sourceUrl": "https://ygoprodeck.com/card/24224830"
+    }
+  ]
+}

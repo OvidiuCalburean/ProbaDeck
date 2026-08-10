@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.DS_Store
+.vitest-attachments/
+__screenshots__/
+examples/showcase/qa/
+examples/showcase/design-qa.md

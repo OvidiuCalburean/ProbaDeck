@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://probadeck.dev/schema/common-v1.schema.json",
+  "$defs": {
+    "fraction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["numerator", "denominator"],
+      "properties": {
+        "numerator": { "type": "string", "pattern": "^-?(0|[1-9][0-9]*)$" },
+        "denominator": { "type": "string", "pattern": "^[1-9][0-9]*$" }
+      }
+    },
+    "jsonValue": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        { "type": "number" },
+        { "type": "string" },
+        { "type": "array", "items": { "$ref": "#/$defs/jsonValue" } },
+        {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+        }
+      ]
+    },
+    "target": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "instanceId"],
+          "properties": {
+            "kind": { "const": "instance" },
+            "instanceId": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "cardKey"],
+          "properties": {
+            "kind": { "const": "card-key" },
+            "cardKey": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "classifier", "value"],
+          "properties": {
+            "kind": { "const": "classifier" },
+            "classifier": { "type": "string", "minLength": 1 },
+            "value": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "targets"],
+          "properties": {
+            "kind": { "enum": ["all", "any"] },
+            "targets": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/target" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "target"],
+          "properties": {
+            "kind": { "const": "not" },
+            "target": { "$ref": "#/$defs/target" }
+          }
+        }
+      ]
+    },
+    "probabilityQuery": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": { "kind": { "const": "next" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "drawNumber"],
+          "properties": {
+            "kind": { "const": "at-draw" },
+            "drawNumber": { "type": "integer", "minimum": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "drawCount"],
+          "properties": {
+            "kind": { "const": "within-draws" },
+            "drawCount": { "type": "integer", "minimum": 0 }
+          }
+        }
+      ]
+    },
+    "calculationNode": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value", "reason"],
+          "properties": {
+            "kind": { "const": "constant" },
+            "value": { "$ref": "#/$defs/fraction" },
+            "reason": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "numerator", "denominator", "value", "reason"],
+          "properties": {
+            "kind": { "const": "ratio" },
+            "numerator": { "type": "string", "pattern": "^-?(0|[1-9][0-9]*)$" },
+            "denominator": { "type": "string", "pattern": "^[1-9][0-9]*$" },
+            "value": { "$ref": "#/$defs/fraction" },
+            "reason": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "poolSize", "matchingCandidates", "queriedLocations", "value"],
+          "properties": {
+            "kind": { "const": "hypergeometric-no-hit" },
+            "poolSize": { "type": "integer", "minimum": 1 },
+            "matchingCandidates": { "type": "integer", "minimum": 0 },
+            "queriedLocations": { "type": "integer", "minimum": 0 },
+            "value": { "$ref": "#/$defs/fraction" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "terms", "value"],
+          "properties": {
+            "kind": { "const": "product" },
+            "terms": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/calculationNode" }
+            },
+            "value": { "$ref": "#/$defs/fraction" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "term", "value"],
+          "properties": {
+            "kind": { "const": "complement" },
+            "term": { "$ref": "#/$defs/calculationNode" },
+            "value": { "$ref": "#/$defs/fraction" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "terms", "value"],
+          "properties": {
+            "kind": { "const": "weighted-sum" },
+            "terms": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["weight", "conditional"],
+                "properties": {
+                  "weight": { "$ref": "#/$defs/fraction" },
+                  "conditional": { "$ref": "#/$defs/fraction" }
+                }
+              }
+            },
+            "value": { "$ref": "#/$defs/fraction" }
+          }
+        }
+      ]
+    },
+    "probabilityExplanation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "revision",
+        "query",
+        "target",
+        "result",
+        "formula",
+        "hypotheses",
+        "matchingInstances"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "revision": { "type": "integer", "minimum": 0 },
+        "query": { "$ref": "#/$defs/probabilityQuery" },
+        "target": { "$ref": "#/$defs/target" },
+        "result": { "$ref": "#/$defs/fraction" },
+        "formula": { "$ref": "#/$defs/calculationNode" },
+        "hypotheses": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["weight", "conditionalProbability", "formula"],
+            "properties": {
+              "weight": { "$ref": "#/$defs/fraction" },
+              "conditionalProbability": { "$ref": "#/$defs/fraction" },
+              "formula": { "$ref": "#/$defs/calculationNode" }
+            }
+          }
+        },
+        "matchingInstances": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["instanceId", "reason"],
+            "properties": {
+              "instanceId": { "type": "string", "minLength": 1 },
+              "reason": {
+                "enum": [
+                  "candidate",
+                  "deterministic-hit",
+                  "drawn",
+                  "outside-query",
+                  "no-queried-pool-location"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

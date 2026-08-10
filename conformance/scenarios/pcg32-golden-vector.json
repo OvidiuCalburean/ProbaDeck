@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "probadeck.conformance/v1",
+  "id": "pcg32-golden-vector",
+  "requirements": ["PD-RNG-002", "PD-RNG-003", "PD-RNG-004"],
+  "definition": { "cardKey": "/name" },
+  "cards": [],
+  "seed": "42",
+  "commands": [
+    {
+      "kind": "pcg32-vector",
+      "stream": "54",
+      "expect": [
+        2707161783, 2068313097, 3122475824, 2211639955, 3215226955, 3421331566, 3217466285,
+        2167406445, 3860803674, 4181216144
+      ]
+    }
+  ]
+}

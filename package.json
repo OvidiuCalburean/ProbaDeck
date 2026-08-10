@@ -1,0 +1,44 @@
+{
+  "name": "probadeck-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ProbaDeck is a deterministic deck simulation and explainable probability engine for partially known card decks.",
+  "scripts": {
+    "build": "pnpm build:core && pnpm build:showcase",
+    "build:core": "pnpm --filter probadeck build",
+    "build:showcase": "pnpm --filter @probadeck/showcase build",
+    "check": "pnpm check:core && pnpm check:showcase && pnpm test:browser && pnpm test:package",
+    "check:core": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm build && pnpm test:types:minimum",
+    "check:showcase": "pnpm --filter @probadeck/showcase check",
+    "dev:showcase": "pnpm --filter @probadeck/showcase dev",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint . --deny-warnings --report-unused-disable-directives",
+    "test": "pnpm --filter probadeck test",
+    "test:browser": "pnpm --filter probadeck test:browser && pnpm --filter @probadeck/showcase test:browser",
+    "test:package": "node scripts/package-smoke-test.mjs",
+    "test:property": "pnpm --filter probadeck test:property",
+    "test:coverage": "pnpm --filter probadeck test:coverage",
+    "test:types:minimum": "node node_modules/typescript-5-0/lib/tsc.js -p packages/typescript/tsconfig.consumer.json",
+    "typecheck": "pnpm --filter probadeck typecheck",
+    "sync:showcase-assets": "pnpm --filter @probadeck/showcase sync:assets"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@vitest/browser-playwright": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.10",
+    "ajv": "^8.17.1",
+    "fast-check": "^4.9.0",
+    "oxfmt": "^0.62.0",
+    "oxlint": "^1.77.0",
+    "oxlint-tsgolint": "^7.0.2001",
+    "playwright": "^1.55.0",
+    "typescript": "^7.0.2",
+    "typescript-5-0": "npm:typescript@5.0.4",
+    "vitest": "^4.1.10"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "packageManager": "pnpm@10.6.4"
+}

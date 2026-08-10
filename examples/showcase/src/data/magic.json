@@ -1,0 +1,171 @@
+{
+  "tournament": {
+    "archetype": "Selesnya Landfall",
+    "event": "Pro Tour Secrets of Strixhaven",
+    "eventDate": "2026-05-03",
+    "pilot": "Nathan Steuer",
+    "sourceUrl": "https://magic.gg/news/pro-tour-secrets-of-strixhaven-top-8-players-and-decks"
+  },
+  "cards": [
+    {
+      "id": "32e670da-7563-4f6a-a7db-4c126a440eb8",
+      "name": "Erode",
+      "count": 4,
+      "typeLine": "Instant",
+      "imagePath": "/assets/cards/magic/erode.jpg",
+      "sourceUrl": "https://scryfall.com/card/sos/15/erode?utm_source=api"
+    },
+    {
+      "id": "e4775a26-0b66-40e9-8f64-41d9308ca032",
+      "name": "Surrak, Elusive Hunter",
+      "count": 1,
+      "typeLine": "Legendary Creature — Human Warrior",
+      "imagePath": "/assets/cards/magic/surrak-elusive-hunter.jpg",
+      "sourceUrl": "https://scryfall.com/card/tdm/161/surrak-elusive-hunter?utm_source=api"
+    },
+    {
+      "id": "9f989c59-7b2a-4036-9ea2-cd0c7e85c15b",
+      "name": "Lumbering Worldwagon",
+      "count": 2,
+      "typeLine": "Artifact — Vehicle",
+      "imagePath": "/assets/cards/magic/lumbering-worldwagon.jpg",
+      "sourceUrl": "https://scryfall.com/card/dft/168/lumbering-worldwagon?utm_source=api"
+    },
+    {
+      "id": "03ebdb36-55e0-49dd-a514-785fbeb4ae19",
+      "name": "Bushwhack",
+      "count": 2,
+      "typeLine": "Sorcery",
+      "imagePath": "/assets/cards/magic/bushwhack.jpg",
+      "sourceUrl": "https://scryfall.com/card/fdn/215/bushwhack?utm_source=api"
+    },
+    {
+      "id": "590a58ab-5e98-4031-8aa6-ce396dc1429f",
+      "name": "Earthbender Ascension",
+      "count": 4,
+      "typeLine": "Enchantment",
+      "imagePath": "/assets/cards/magic/earthbender-ascension.jpg",
+      "sourceUrl": "https://scryfall.com/card/tla/175/earthbender-ascension?utm_source=api"
+    },
+    {
+      "id": "b9b0589d-f327-46a7-8bac-06b7654c547a",
+      "name": "Temple Garden",
+      "count": 2,
+      "typeLine": "Land — Forest Plains",
+      "imagePath": "/assets/cards/magic/temple-garden.jpg",
+      "sourceUrl": "https://scryfall.com/card/trk/301/temple-garden?utm_source=api"
+    },
+    {
+      "id": "dce15387-4114-4b3e-91aa-5b42b45c44ac",
+      "name": "Forest",
+      "count": 7,
+      "typeLine": "Basic Land — Forest",
+      "imagePath": "/assets/cards/magic/forest.jpg",
+      "sourceUrl": "https://scryfall.com/card/trk/325/forest?utm_source=api"
+    },
+    {
+      "id": "dda6b4d0-1b60-46b0-b321-b9ffe15afff4",
+      "name": "Sazh's Chocobo",
+      "count": 4,
+      "typeLine": "Creature — Bird",
+      "imagePath": "/assets/cards/magic/sazh-s-chocobo.jpg",
+      "sourceUrl": "https://scryfall.com/card/fin/200/sazhs-chocobo?utm_source=api"
+    },
+    {
+      "id": "d9482aab-6ddf-48e1-84fa-b13d5ff81e69",
+      "name": "Icetill Explorer",
+      "count": 2,
+      "typeLine": "Creature — Insect Scout",
+      "imagePath": "/assets/cards/magic/icetill-explorer.jpg",
+      "sourceUrl": "https://scryfall.com/card/eoe/192/icetill-explorer?utm_source=api"
+    },
+    {
+      "id": "8cf33d80-0704-4dc4-8e8d-1dcbcbc35add",
+      "name": "Keen-Eyed Curator",
+      "count": 1,
+      "typeLine": "Creature — Raccoon Scout",
+      "imagePath": "/assets/cards/magic/keen-eyed-curator.jpg",
+      "sourceUrl": "https://scryfall.com/card/blb/181/keen-eyed-curator?utm_source=api"
+    },
+    {
+      "id": "6a0b230b-d391-4998-a3f7-7b158a0ec2cd",
+      "name": "Llanowar Elves",
+      "count": 4,
+      "typeLine": "Creature — Elf Druid",
+      "imagePath": "/assets/cards/magic/llanowar-elves.jpg",
+      "sourceUrl": "https://scryfall.com/card/fdn/227/llanowar-elves?utm_source=api"
+    },
+    {
+      "id": "340c5799-4964-44dd-8c48-8f3f3aba5211",
+      "name": "Badgermole Cub",
+      "count": 4,
+      "typeLine": "Creature — Badger Mole",
+      "imagePath": "/assets/cards/magic/badgermole-cub.jpg",
+      "sourceUrl": "https://scryfall.com/card/tla/167/badgermole-cub?utm_source=api"
+    },
+    {
+      "id": "62ef854d-ec9e-443d-a4ba-4b2875ed3fe7",
+      "name": "Fabled Passage",
+      "count": 4,
+      "typeLine": "Land",
+      "imagePath": "/assets/cards/magic/fabled-passage.jpg",
+      "sourceUrl": "https://scryfall.com/card/msc/242/fabled-passage?utm_source=api"
+    },
+    {
+      "id": "994ca692-7138-4dcb-bf46-5da530f86036",
+      "name": "Dyadrine, Synthesis Amalgam",
+      "count": 2,
+      "typeLine": "Legendary Artifact Creature — Construct",
+      "imagePath": "/assets/cards/magic/dyadrine-synthesis-amalgam.jpg",
+      "sourceUrl": "https://scryfall.com/card/eoe/216/dyadrine-synthesis-amalgam?utm_source=api"
+    },
+    {
+      "id": "ec288d76-c1f5-471b-8a53-504f88469c1b",
+      "name": "Hushwood Verge",
+      "count": 4,
+      "typeLine": "Land",
+      "imagePath": "/assets/cards/magic/hushwood-verge.jpg",
+      "sourceUrl": "https://scryfall.com/card/dsk/261/hushwood-verge?utm_source=api"
+    },
+    {
+      "id": "f32302f1-b54f-4489-9d0b-9b771e59da06",
+      "name": "Mightform Harmonizer",
+      "count": 4,
+      "typeLine": "Creature — Insect Druid",
+      "imagePath": "/assets/cards/magic/mightform-harmonizer.jpg",
+      "sourceUrl": "https://scryfall.com/card/eoe/200/mightform-harmonizer?utm_source=api"
+    },
+    {
+      "id": "5df90940-15ea-418c-8547-6c75d69ec6d3",
+      "name": "Escape Tunnel",
+      "count": 3,
+      "typeLine": "Land",
+      "imagePath": "/assets/cards/magic/escape-tunnel.jpg",
+      "sourceUrl": "https://scryfall.com/card/tmt/184/escape-tunnel?utm_source=api"
+    },
+    {
+      "id": "8ab0f4c0-b331-4c57-b68f-2e24bb5ba06c",
+      "name": "Plains",
+      "count": 2,
+      "typeLine": "Basic Land — Plains",
+      "imagePath": "/assets/cards/magic/plains.jpg",
+      "sourceUrl": "https://scryfall.com/card/trk/317/plains?utm_source=api"
+    },
+    {
+      "id": "bdf3b2be-d0cd-4a3c-a10e-82d32c12d3bd",
+      "name": "Ba Sing Se",
+      "count": 3,
+      "typeLine": "Land",
+      "imagePath": "/assets/cards/magic/ba-sing-se.jpg",
+      "sourceUrl": "https://scryfall.com/card/tla/266/ba-sing-se?utm_source=api"
+    },
+    {
+      "id": "7054a0d7-396f-40b4-ab24-db591c3b08f0",
+      "name": "Mossborn Hydra",
+      "count": 1,
+      "typeLine": "Creature — Elemental Hydra",
+      "imagePath": "/assets/cards/magic/mossborn-hydra.jpg",
+      "sourceUrl": "https://scryfall.com/card/fdn/107/mossborn-hydra?utm_source=api"
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://probadeck.dev/schema/snapshot-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "revision",
+    "maxHypotheses",
+    "nextInstanceNumber",
+    "instances",
+    "active",
+    "drawn",
+    "knowledge",
+    "random",
+    "randomAlgorithm",
+    "events"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "probadeck.snapshot/v1" },
+    "revision": { "type": "integer", "minimum": 0 },
+    "maxHypotheses": { "type": "integer", "minimum": 1 },
+    "nextInstanceNumber": { "type": "integer", "minimum": 1 },
+    "instances": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/instance" }
+    },
+    "active": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "drawn": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "knowledge": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/hypothesis" }
+    },
+    "random": {
+      "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/pcg32State" }]
+    },
+    "randomAlgorithm": {
+      "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/auditEvent" }
+    }
+  },
+  "$defs": {
+    "instance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["instanceId", "card", "cardKey", "classifiers"],
+      "properties": {
+        "instanceId": { "type": "string", "minLength": 1 },
+        "card": { "$ref": "common-v1.schema.json#/$defs/jsonValue" },
+        "cardKey": { "type": "string", "minLength": 1 },
+        "classifiers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "cell": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "instanceId"],
+          "properties": {
+            "kind": { "const": "fixed" },
+            "instanceId": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "poolId"],
+          "properties": {
+            "kind": { "const": "pool" },
+            "poolId": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "pool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["poolId", "candidates"],
+      "properties": {
+        "poolId": { "type": "string", "minLength": 1 },
+        "candidates": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "hypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["weight", "active", "drawn", "pools"],
+      "properties": {
+        "weight": { "$ref": "common-v1.schema.json#/$defs/fraction" },
+        "active": { "type": "array", "items": { "$ref": "#/$defs/cell" } },
+        "drawn": { "type": "array", "items": { "$ref": "#/$defs/cell" } },
+        "pools": { "type": "array", "items": { "$ref": "#/$defs/pool" } }
+      }
+    },
+    "pcg32State": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "state", "increment"],
+      "properties": {
+        "algorithm": { "const": "pcg32-v1" },
+        "state": { "type": "string", "pattern": "^(0|[1-9][0-9]*)$" },
+        "increment": { "type": "string", "pattern": "^(0|[1-9][0-9]*)$" }
+      }
+    },
+    "observerEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "sequence", "revision", "kind", "details"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "revision": { "type": "integer", "minimum": 0 },
+        "kind": { "type": "string", "minLength": 1 },
+        "details": {
+          "type": "object",
+          "additionalProperties": { "$ref": "common-v1.schema.json#/$defs/jsonValue" }
+        }
+      }
+    },
+    "auditEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "sequence",
+        "revision",
+        "kind",
+        "request",
+        "resolution",
+        "observation"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "revision": { "type": "integer", "minimum": 0 },
+        "kind": { "type": "string", "minLength": 1 },
+        "request": {
+          "type": "object",
+          "additionalProperties": { "$ref": "common-v1.schema.json#/$defs/jsonValue" }
+        },
+        "resolution": {
+          "type": "object",
+          "additionalProperties": { "$ref": "common-v1.schema.json#/$defs/jsonValue" }
+        },
+        "observation": { "$ref": "#/$defs/observerEvent" }
+      }
+    }
+  }
+}

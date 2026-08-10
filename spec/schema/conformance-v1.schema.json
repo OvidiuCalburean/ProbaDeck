@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://probadeck.dev/schema/conformance-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "requirements", "definition", "cards", "commands"],
+  "properties": {
+    "schemaVersion": { "const": "probadeck.conformance/v1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "requirements": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^PD-[A-Z]+-[0-9]{3}$" }
+    },
+    "definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cardKey"],
+      "properties": {
+        "cardKey": { "type": "string", "pattern": "^/" },
+        "classifiers": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "pattern": "^/" }
+        }
+      }
+    },
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["instanceId", "card"],
+        "properties": {
+          "instanceId": { "type": "string", "minLength": 1 },
+          "card": { "$ref": "common-v1.schema.json#/$defs/jsonValue" }
+        }
+      }
+    },
+    "seed": { "type": "string", "pattern": "^(0|[1-9][0-9]*)$" },
+    "commands": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "$ref": "#/$defs/pcg32VectorCommand" },
+          { "$ref": "#/$defs/shuffleCommand" },
+          { "$ref": "#/$defs/shuffleTapeCommand" },
+          { "$ref": "#/$defs/probabilityAtDrawCommand" },
+          { "$ref": "#/$defs/probabilityWithinCommand" },
+          { "$ref": "#/$defs/probabilityNextCommand" },
+          { "$ref": "#/$defs/drawCommand" },
+          { "$ref": "#/$defs/insertCommand" }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "visibility": { "enum": ["hidden", "revealed"] },
+    "bounds": { "enum": ["error", "clamp"] },
+    "entropy": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "integer", "minimum": 0, "maximum": 4294967295 }
+    },
+    "instanceIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "fractionExpectation": {
+      "$ref": "common-v1.schema.json#/$defs/fraction"
+    },
+    "observerExpectation": {
+      "type": "object",
+      "additionalProperties": { "$ref": "common-v1.schema.json#/$defs/jsonValue" }
+    },
+    "shuffleRegion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startIndex", "endIndexExclusive"],
+      "properties": {
+        "startIndex": { "type": "integer" },
+        "endIndexExclusive": { "type": "integer" }
+      }
+    },
+    "placement": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "index"],
+          "properties": {
+            "kind": { "const": "index" },
+            "index": { "type": "integer" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "offset"],
+          "properties": {
+            "kind": { "const": "from-top" },
+            "offset": { "type": "integer" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "offset"],
+          "properties": {
+            "kind": { "const": "from-bottom" },
+            "offset": { "type": "integer" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "startGap", "endGap"],
+          "properties": {
+            "kind": { "const": "random-within" },
+            "startGap": { "type": "integer" },
+            "endGap": { "type": "integer" }
+          }
+        }
+      ]
+    },
+    "insertItem": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "instanceId", "card"],
+          "properties": {
+            "kind": { "const": "new" },
+            "instanceId": { "type": "string", "minLength": 1 },
+            "card": { "$ref": "common-v1.schema.json#/$defs/jsonValue" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "instanceId"],
+          "properties": {
+            "kind": { "const": "drawn" },
+            "instanceId": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "operationExpectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appliedGap": { "type": "integer", "minimum": 0 },
+        "referenceLength": { "type": "integer", "minimum": 0 },
+        "wasClamped": { "type": "boolean" }
+      }
+    },
+    "pcg32VectorCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "stream", "expect"],
+      "properties": {
+        "kind": { "const": "pcg32-vector" },
+        "stream": { "type": "string", "pattern": "^(0|[1-9][0-9]*)$" },
+        "expect": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "integer", "minimum": 0, "maximum": 4294967295 }
+        }
+      }
+    },
+    "shuffleCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": { "const": "shuffle" },
+        "visibility": { "$ref": "#/$defs/visibility" },
+        "bounds": { "$ref": "#/$defs/bounds" },
+        "region": { "$ref": "#/$defs/shuffleRegion" },
+        "expectAppliedOrder": { "$ref": "#/$defs/instanceIds" },
+        "expectObserver": { "$ref": "#/$defs/observerExpectation" }
+      }
+    },
+    "shuffleTapeCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "entropy", "expectAppliedOrder"],
+      "properties": {
+        "kind": { "const": "shuffle-with-entropy-tape" },
+        "visibility": { "$ref": "#/$defs/visibility" },
+        "bounds": { "$ref": "#/$defs/bounds" },
+        "region": { "$ref": "#/$defs/shuffleRegion" },
+        "entropy": { "$ref": "#/$defs/entropy" },
+        "expectAppliedOrder": { "$ref": "#/$defs/instanceIds" },
+        "expectObserver": { "$ref": "#/$defs/observerExpectation" }
+      }
+    },
+    "probabilityAtDrawCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "target", "drawNumber", "expect"],
+      "properties": {
+        "kind": { "const": "probability-at-draw" },
+        "target": { "$ref": "common-v1.schema.json#/$defs/target" },
+        "drawNumber": { "type": "integer", "minimum": 1 },
+        "expect": { "$ref": "#/$defs/fractionExpectation" }
+      }
+    },
+    "probabilityWithinCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "target", "drawCount", "expect"],
+      "properties": {
+        "kind": { "const": "probability-within-draws" },
+        "target": { "$ref": "common-v1.schema.json#/$defs/target" },
+        "drawCount": { "type": "integer", "minimum": 0 },
+        "expect": { "$ref": "#/$defs/fractionExpectation" }
+      }
+    },
+    "probabilityNextCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "target", "expect"],
+      "properties": {
+        "kind": { "const": "probability-next" },
+        "target": { "$ref": "common-v1.schema.json#/$defs/target" },
+        "expect": { "$ref": "#/$defs/fractionExpectation" }
+      }
+    },
+    "drawCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "count", "reveal", "expectInstanceIds"],
+      "properties": {
+        "kind": { "const": "draw" },
+        "count": { "type": "integer", "minimum": 1 },
+        "reveal": { "type": "boolean" },
+        "expectInstanceIds": { "$ref": "#/$defs/instanceIds" },
+        "expectObserver": { "$ref": "#/$defs/observerExpectation" }
+      }
+    },
+    "insertCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "items", "placement"],
+      "properties": {
+        "kind": { "const": "insert" },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/insertItem" }
+        },
+        "placement": { "$ref": "#/$defs/placement" },
+        "order": { "enum": ["preserve", "random"] },
+        "visibility": { "$ref": "#/$defs/visibility" },
+        "bounds": { "$ref": "#/$defs/bounds" },
+        "entropy": { "$ref": "#/$defs/entropy" },
+        "expect": { "$ref": "#/$defs/operationExpectation" },
+        "expectObserver": { "$ref": "#/$defs/observerExpectation" },
+        "expectError": { "type": "string", "pattern": "^[A-Z]+(?:_[A-Z]+)*$" },
+        "expectRevision": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

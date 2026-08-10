@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "probadeck.conformance/v1",
+  "id": "duplicate-logical-cards",
+  "requirements": ["PD-ID-002", "PD-TARGET-002", "PD-PROB-005", "PD-PROB-006"],
+  "definition": {
+    "cardKey": "/name",
+    "classifiers": { "group": "/group" }
+  },
+  "cards": [
+    { "instanceId": "target-a", "card": { "name": "copy", "group": "target" } },
+    { "instanceId": "target-b", "card": { "name": "copy", "group": "target" } },
+    { "instanceId": "target-c", "card": { "name": "copy", "group": "target" } },
+    { "instanceId": "other-1", "card": { "name": "one", "group": "other" } },
+    { "instanceId": "other-2", "card": { "name": "two", "group": "other" } },
+    { "instanceId": "other-3", "card": { "name": "three", "group": "other" } },
+    { "instanceId": "other-4", "card": { "name": "four", "group": "other" } },
+    { "instanceId": "other-5", "card": { "name": "five", "group": "other" } },
+    { "instanceId": "other-6", "card": { "name": "six", "group": "other" } },
+    { "instanceId": "other-7", "card": { "name": "seven", "group": "other" } }
+  ],
+  "seed": "42",
+  "commands": [
+    {
+      "kind": "shuffle",
+      "visibility": "hidden",
+      "expectObserver": { "instanceIds": null }
+    },
+    {
+      "kind": "probability-at-draw",
+      "target": { "kind": "card-key", "cardKey": "copy" },
+      "drawNumber": 4,
+      "expect": { "numerator": "3", "denominator": "10" }
+    },
+    {
+      "kind": "probability-within-draws",
+      "target": { "kind": "classifier", "classifier": "group", "value": "target" },
+      "drawCount": 2,
+      "expect": { "numerator": "8", "denominator": "15" }
+    },
+    {
+      "kind": "probability-within-draws",
+      "target": { "kind": "instance", "instanceId": "target-a" },
+      "drawCount": 2,
+      "expect": { "numerator": "1", "denominator": "5" }
+    }
+  ]
+}

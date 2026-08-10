@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "probadeck.conformance/v1",
+  "id": "shuffled-ten-card",
+  "requirements": ["PD-PROB-002", "PD-PROB-003", "PD-PROB-005", "PD-PROB-006"],
+  "definition": {
+    "cardKey": "/name",
+    "classifiers": { "group": "/group" }
+  },
+  "cards": [
+    { "instanceId": "card-1", "card": { "name": "one", "group": "target" } },
+    { "instanceId": "card-2", "card": { "name": "two", "group": "other" } },
+    { "instanceId": "card-3", "card": { "name": "three", "group": "other" } },
+    { "instanceId": "card-4", "card": { "name": "four", "group": "other" } },
+    { "instanceId": "card-5", "card": { "name": "five", "group": "other" } },
+    { "instanceId": "card-6", "card": { "name": "six", "group": "other" } },
+    { "instanceId": "card-7", "card": { "name": "seven", "group": "other" } },
+    { "instanceId": "card-8", "card": { "name": "eight", "group": "other" } },
+    { "instanceId": "card-9", "card": { "name": "nine", "group": "other" } },
+    { "instanceId": "card-10", "card": { "name": "ten", "group": "other" } }
+  ],
+  "seed": "42",
+  "commands": [
+    {
+      "kind": "shuffle",
+      "visibility": "hidden",
+      "expectObserver": { "instanceIds": null }
+    },
+    {
+      "kind": "probability-at-draw",
+      "target": { "kind": "instance", "instanceId": "card-1" },
+      "drawNumber": 7,
+      "expect": { "numerator": "1", "denominator": "10" }
+    },
+    {
+      "kind": "probability-within-draws",
+      "target": { "kind": "instance", "instanceId": "card-1" },
+      "drawCount": 3,
+      "expect": { "numerator": "3", "denominator": "10" }
+    }
+  ]
+}
