@@ -6,7 +6,8 @@ export default defineConfig({
     outDir: "dist/client",
   },
   optimizeDeps: {
-    include: ["probadeck", "react", "react-dom/client"],
+    exclude: ["probadeck"],
+    include: ["react", "react-dom/client"],
   },
   server: {
     host: "0.0.0.0",

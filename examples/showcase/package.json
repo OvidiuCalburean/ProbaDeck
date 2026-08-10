@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "pnpm --filter probadeck build && vite",
     "build": "vite build && node scripts/prepare-sites-build.mjs",
     "check": "pnpm typecheck && pnpm test && pnpm build && pnpm test:sites",
     "preview": "vite preview",
