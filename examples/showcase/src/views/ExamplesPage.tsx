@@ -1,3 +1,4 @@
+// Astro pre-renders the deterministic default scenario before React hydrates the simulator.
 import { useEffect, useMemo, useState } from "react";
 import { ProbaDeckError, type ProbabilityQuery } from "probadeck";
 
@@ -29,6 +30,7 @@ function createSessions(): Readonly<Record<ScenarioId, ScenarioSession>> {
 }
 
 function scenarioFromHash(): ScenarioId {
+  if (typeof window === "undefined") return "holdem";
   const candidate = window.location.hash.slice(1);
   return candidate === "magic" || candidate === "yugioh" ? candidate : "holdem";
 }
@@ -49,8 +51,8 @@ function errorNotice(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-export function ExamplesPage() {
-  const [activeId, setActiveId] = useState<ScenarioId>(scenarioFromHash);
+export function ExamplesExperience() {
+  const [activeId, setActiveId] = useState<ScenarioId>("holdem");
   const [sessions, setSessions] = useState(createSessions);
   const [query, setQuery] = useState<ProbabilityQuery>({ kind: "next" });
   const [selectedInstanceId, setSelectedInstanceId] = useState<string | null>(null);
@@ -79,6 +81,7 @@ export function ExamplesPage() {
       setNotice(null);
     }
 
+    updateScenarioFromHash();
     window.addEventListener("hashchange", updateScenarioFromHash);
     return () => window.removeEventListener("hashchange", updateScenarioFromHash);
   }, []);
@@ -111,70 +114,68 @@ export function ExamplesPage() {
   }
 
   return (
-    <div className="app-shell" id="top">
-      <AppHeader current="examples" />
-      <main className="examples-main">
-        <ScenarioTabs
-          activeId={activeId}
-          onChange={(id) => {
-            setActiveId(id);
-            window.history.replaceState(null, "", `/examples#${id}`);
-            setQuery({ kind: "next" });
-            setNotice(null);
+    <div className="examples-experience">
+      <ScenarioTabs
+        activeId={activeId}
+        onChange={(id) => {
+          setActiveId(id);
+          window.history.replaceState(null, "", `/examples/#${id}`);
+          setQuery({ kind: "next" });
+          setNotice(null);
+        }}
+      />
+
+      <div
+        className="scenario-layout"
+        id={`panel-${activeId}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${activeId}`}
+      >
+        <ScenarioBoard
+          session={session}
+          selectedInstanceId={selectedInstanceId}
+          returnPlacement={returnPlacement}
+          onSelectCard={setSelectedInstanceId}
+          onPlacementChange={setReturnPlacement}
+          onDraw={() => runAction({ kind: "draw" })}
+          onReturnCard={() => {
+            if (selectedInstanceId === null) return;
+            runAction({
+              kind: "return-card",
+              instanceId: selectedInstanceId,
+              placement: returnPlacement,
+            });
           }}
+          onShuffle={() => runAction({ kind: "shuffle" })}
+          onReset={resetActiveScenario}
         />
+        <ProbabilityLedger
+          key={activeId}
+          session={session}
+          view={probabilityView}
+          onQueryChange={setQuery}
+        />
+      </div>
 
-        <div
-          className="scenario-layout"
-          id={`panel-${activeId}`}
-          role="tabpanel"
-          aria-labelledby={`tab-${activeId}`}
-        >
-          <ScenarioBoard
-            session={session}
-            selectedInstanceId={selectedInstanceId}
-            returnPlacement={returnPlacement}
-            onSelectCard={setSelectedInstanceId}
-            onPlacementChange={setReturnPlacement}
-            onDraw={() => runAction({ kind: "draw" })}
-            onReturnCard={() => {
-              if (selectedInstanceId === null) return;
-              runAction({
-                kind: "return-card",
-                instanceId: selectedInstanceId,
-                placement: returnPlacement,
-              });
-            }}
-            onShuffle={() => runAction({ kind: "shuffle" })}
-            onReset={resetActiveScenario}
-          />
-          <ProbabilityLedger
-            key={activeId}
-            session={session}
-            view={probabilityView}
-            onQueryChange={setQuery}
-          />
-        </div>
+      <div className="notice" aria-live="polite">
+        {notice}
+      </div>
+      <ObserverBar key={`${activeId}-${session.seed.toString()}`} session={session} />
+      <EventTimeline events={session.events} />
 
-        <div className="notice" aria-live="polite">
-          {notice}
-        </div>
-        <ObserverBar key={`${activeId}-${session.seed.toString()}`} session={session} />
-        <EventTimeline events={session.events} />
-
-        {activeId === "magic" ? (
-          <section className="typescript-strip" id="typescript">
-            <div>
-              <span className="eyebrow">The calculation behind the interface</span>
-              <h2>Every number is a ProbaDeck result.</h2>
-              <p>
-                External card services provide only names, types, and images. The immutable deck
-                state, seeded randomness, observer knowledge, exact fraction, and explanation all
-                come from the TypeScript library.
-              </p>
-            </div>
-            <pre aria-label="TypeScript example">
-              <code>{`const result = probabilityOfNext(deck, {
+      {activeId === "magic" ? (
+        <section className="typescript-strip" id="typescript">
+          <div>
+            <span className="eyebrow">The calculation behind the interface</span>
+            <h2>Every number is a ProbaDeck result.</h2>
+            <p>
+              External card services provide only names, types, and images. The immutable deck
+              state, seeded randomness, observer knowledge, exact fraction, and explanation all come
+              from the TypeScript library.
+            </p>
+          </div>
+          <pre aria-label="TypeScript example">
+            <code>{`const result = probabilityOfNext(deck, {
   kind: "classifier",
   classifier: "type",
   value: "Land",
@@ -182,11 +183,20 @@ export function ExamplesPage() {
 
 result.exact;       // { numerator, denominator }
 result.explanation; // structured proof`}</code>
-            </pre>
-          </section>
-        ) : null}
-      </main>
+          </pre>
+        </section>
+      ) : null}
+    </div>
+  );
+}
 
+export function ExamplesPage() {
+  return (
+    <div className="app-shell" id="top">
+      <AppHeader current="examples" />
+      <main className="examples-main">
+        <ExamplesExperience />
+      </main>
       <SiteFooter variant="examples" />
     </div>
   );

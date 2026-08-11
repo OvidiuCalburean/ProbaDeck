@@ -1,0 +1,28 @@
+---
+import { AppHeader } from "../../components/AppHeader.js";
+import { SiteFooter } from "../../components/SiteFooter.js";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { ExamplesExperience } from "../../views/ExamplesPage.js";
+---
+
+<SiteLayout
+  description="Explore exact deck probabilities for Texas Hold’em, Magic: The Gathering, and Yu-Gi-Oh! with ProbaDeck."
+  path="/examples/"
+  title="Interactive examples — ProbaDeck"
+>
+  <div class="app-shell" id="top">
+    <AppHeader current="examples" />
+    <main class="examples-main">
+      <section class="examples-intro" aria-labelledby="examples-title">
+        <span class="section-kicker">Interactive probability lab</span>
+        <h1 id="examples-title">Exact answers from decks in motion.</h1>
+        <p>
+          Deal, draw, return, and shuffle across three familiar games while ProbaDeck keeps every
+          probability exact and explainable.
+        </p>
+      </section>
+      <ExamplesExperience client:idle={{ timeout: 1500 }} />
+    </main>
+    <SiteFooter variant="examples" />
+  </div>
+</SiteLayout>

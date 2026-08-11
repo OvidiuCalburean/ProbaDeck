@@ -1,0 +1,132 @@
+name: Deploy static website
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "41 6 * * 1"
+
+concurrency:
+  group: probadeck-production-website
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  verify-and-deploy:
+    name: Verify free plan and publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    env:
+      AWS_REGION: us-east-1
+      AWS_ROLE_ARN: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+      SITE_BUCKET: ${{ vars.SITE_BUCKET }}
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+      ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
+      AWS_PRICING_PLAN_RESOURCE_ARNS: ${{ vars.AWS_PRICING_PLAN_RESOURCE_ARNS }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate deployment configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in AWS_ROLE_ARN SITE_BUCKET CLOUDFRONT_DISTRIBUTION_ID ACM_CERTIFICATE_ARN AWS_PRICING_PLAN_RESOURCE_ARNS; do
+            if [[ -z "${!name:-}" ]]; then
+              echo "Missing production environment variable: ${name}" >&2
+              exit 1
+            fi
+          done
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build pricing-plan verifier
+        run: pnpm build:infra
+
+      - name: Authenticate to AWS with short-lived credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Require the active CloudFront FREE plan
+        run: pnpm --filter @probadeck/aws-infra verify:plan
+
+      - name: Require an issued ACM certificate
+        shell: bash
+        run: |
+          set -euo pipefail
+          status="$(aws acm describe-certificate --certificate-arn "${ACM_CERTIFICATE_ARN}" --query 'Certificate.Status' --output text)"
+          if [[ "${status}" != "ISSUED" ]]; then
+            echo "ACM certificate is ${status}, not ISSUED" >&2
+            exit 1
+          fi
+
+      - name: Build static site
+        if: github.event_name != 'schedule'
+        run: pnpm build:core && pnpm build:showcase && pnpm --filter @probadeck/showcase test:static
+
+      - name: Upload immutable hashed assets
+        if: github.event_name != 'schedule'
+        shell: bash
+        run: |
+          set -euo pipefail
+          aws s3 sync examples/showcase/dist/client/_astro/ "s3://${SITE_BUCKET}/_astro/" \
+            --cache-control "public,max-age=31536000,immutable" \
+            --only-show-errors
+
+      - name: Upload static pages and public assets
+        if: github.event_name != 'schedule'
+        shell: bash
+        run: |
+          set -euo pipefail
+          aws s3 sync examples/showcase/dist/client/ "s3://${SITE_BUCKET}/" \
+            --delete \
+            --exclude "_astro/*" \
+            --cache-control "public,max-age=300,must-revalidate" \
+            --only-show-errors
+
+      - name: Refresh CloudFront cache
+        if: github.event_name != 'schedule'
+        shell: bash
+        run: |
+          set -euo pipefail
+          invalidation_id="$(aws cloudfront create-invalidation \
+            --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
+            --paths "/*" \
+            --query 'Invalidation.Id' \
+            --output text)"
+          aws cloudfront wait invalidation-completed \
+            --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
+            --id "${invalidation_id}"
+
+      - name: Remove stale hashed assets
+        if: github.event_name != 'schedule'
+        shell: bash
+        run: |
+          set -euo pipefail
+          aws s3 sync examples/showcase/dist/client/_astro/ "s3://${SITE_BUCKET}/_astro/" \
+            --delete \
+            --cache-control "public,max-age=31536000,immutable" \
+            --only-show-errors
+
+      - name: Summarize deployment
+        if: github.event_name != 'schedule'
+        run: echo "Published ${GITHUB_SHA} to https://probadeck.com/"

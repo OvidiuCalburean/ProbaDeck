@@ -11,9 +11,12 @@ export function DeckStack({ count, label }: DeckStackProps) {
           <img
             key={index}
             alt=""
+            decoding="async"
             draggable="false"
-            src="/assets/cards/standard/back.png"
+            height={314}
+            src="/assets/cards/standard/back.webp"
             style={{ transform: `translate(${index * 1.4}px, ${index * 2}px)` }}
+            width={226}
           />
         ))}
       </div>

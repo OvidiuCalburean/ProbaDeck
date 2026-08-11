@@ -32,8 +32,8 @@ function HoldemZones({ session }: { readonly session: ScenarioSession }) {
           <span>2 hole cards</span>
         </div>
         <div className="card-row">
-          {session.zones.hand.map((instance) => (
-            <CardFace key={instance.instanceId} instance={instance} />
+          {session.zones.hand.map((instance, index) => (
+            <CardFace key={instance.instanceId} instance={instance} priority={index === 0} />
           ))}
         </div>
       </section>
@@ -72,11 +72,12 @@ function TournamentHand({
         <span>{session.zones.hand.length} revealed cards · choose one to return</span>
       </div>
       <div className="card-row card-row--tournament">
-        {session.zones.hand.map((instance) => (
+        {session.zones.hand.map((instance, index) => (
           <CardFace
             key={instance.instanceId}
             compact
             instance={instance}
+            priority={index === 0}
             selectable
             selected={instance.instanceId === selectedInstanceId}
             onSelect={onSelectCard}
@@ -173,7 +174,7 @@ export function ScenarioBoard({
       <div className="scenario-heading">
         <div>
           <span className="eyebrow">{session.definition.eyebrow}</span>
-          <h1 id="scenario-title">{stateTitle}</h1>
+          <h2 id="scenario-title">{stateTitle}</h2>
           <p>{session.definition.description}</p>
         </div>
         <span className="seed-chip">seed {session.seed.toString()}</span>

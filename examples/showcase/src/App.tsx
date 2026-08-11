@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
-import { DocsPage } from "./pages/DocsPage.js";
-import { ExamplesPage } from "./pages/ExamplesPage.js";
-import { HomePage } from "./pages/HomePage.js";
+import { DocsPage } from "./views/DocsPage.js";
+import { ExamplesPage } from "./views/ExamplesPage.js";
+import { HomePage } from "./views/HomePage.js";
 
 function routeForPath(pathname: string) {
   if (pathname === "/docs" || pathname.startsWith("/docs/")) return "docs";

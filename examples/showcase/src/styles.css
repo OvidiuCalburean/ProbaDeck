@@ -148,6 +148,25 @@ pre {
   padding: 0 clamp(22px, 3vw, 38px) 64px;
 }
 
+.examples-intro {
+  padding: clamp(34px, 4vw, 54px) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.examples-intro h1 {
+  max-width: 820px;
+  margin-top: 10px;
+  font-size: clamp(34px, 4vw, 58px);
+}
+
+.examples-intro p {
+  max-width: 740px;
+  margin: 15px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
 .scenario-navigation {
   border-bottom: 1px solid var(--line);
 }
@@ -336,6 +355,7 @@ pre {
 .card-face img {
   display: block;
   width: 100%;
+  height: auto;
   aspect-ratio: 0.715;
   object-fit: cover;
   border-radius: 6px;
@@ -730,51 +750,60 @@ pre {
 }
 
 .probability-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
   border-top: 1px solid var(--line);
 }
 
 .probability-row {
-  width: 100%;
-  min-height: 41px;
-  padding: 3px 7px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.8fr) 0.55fr 0.55fr 0.55fr;
-  align-items: center;
-  gap: 8px;
-  border: 0;
-  border-bottom: 1px solid #ddd7ce;
+  height: 41px;
   background: transparent;
   color: #282b29;
-  text-align: left;
   font-size: 11px;
 }
 
-button.probability-row {
-  cursor: pointer;
+.probability-row > * {
+  padding: 3px 7px;
+  border-bottom: 1px solid #ddd7ce;
+  font-weight: 400;
+  text-align: left;
+  vertical-align: middle;
 }
 
-button.probability-row:hover,
-button.probability-row.is-explained {
+.probability-row > :first-child {
+  width: 46%;
+}
+
+.probability-row:hover,
+.probability-row.is-explained {
   background: rgb(13 125 123 / 6%);
 }
 
 .probability-row--header {
-  min-height: 30px;
-  padding-block: 2px;
+  height: 30px;
   color: #626560;
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.probability-card {
+.probability-card-button {
+  width: 100%;
   min-width: 0;
+  padding: 0;
   display: flex;
   align-items: center;
   gap: 9px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
 }
 
-.probability-card img {
+.probability-card-button img {
   width: 23px;
   height: 32px;
   flex: none;
@@ -782,7 +811,7 @@ button.probability-row.is-explained {
   border-radius: 2px;
 }
 
-.probability-card > span {
+.probability-card-button > span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1948,6 +1977,18 @@ button.probability-row.is-explained {
 .copy-button svg {
   width: 16px;
   height: 16px;
+}
+
+.copy-button__success {
+  display: none;
+}
+
+.copy-button.is-copied .copy-button__default {
+  display: none;
+}
+
+.copy-button.is-copied .copy-button__success {
+  display: inline;
 }
 
 .docs-code-block {
@@ -3316,12 +3357,12 @@ button.probability-row.is-explained {
     white-space: nowrap;
   }
 
-  .probability-row {
-    grid-template-columns: minmax(0, 1.5fr) 0.55fr 0.55fr;
-  }
-
   .probability-row > :nth-child(2) {
     display: none;
+  }
+
+  .probability-row > :first-child {
+    width: 55%;
   }
 
   .observer-bar {

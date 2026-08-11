@@ -55,7 +55,14 @@ export function ObserverBar({ session }: ObserverBarProps) {
           <ol>
             {privileged.map((instance) => (
               <li key={instance.instanceId}>
-                <img alt="" src={instance.card.imagePath} />
+                <img
+                  alt=""
+                  decoding="async"
+                  height={314}
+                  loading="lazy"
+                  src={instance.card.imagePath}
+                  width={226}
+                />
                 <span>{instance.card.name}</span>
               </li>
             ))}

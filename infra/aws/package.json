@@ -1,0 +1,27 @@
+{
+  "name": "@probadeck/aws-infra",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "pnpm build && pnpm test && pnpm synth:test",
+    "synth": "pnpm build && cdk synth",
+    "synth:test": "pnpm build && cdk synth -c hostedZoneId=Z00000000000000000000 -c billingAlertEmail=alerts@example.com -c githubOidcProviderArn=arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com --quiet",
+    "test": "node --test tests/*.test.mjs",
+    "verify:plan": "node dist/verify-pricing-plan.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-pricing-plan-manager": "3.1106.0",
+    "aws-cdk-lib": "2.263.0",
+    "constructs": "10.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "aws-cdk": "2.1135.1",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}

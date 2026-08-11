@@ -11,10 +11,11 @@
     "types": ["node", "vite/client", "vitest/globals"]
   },
   "include": [
+    ".astro/types.d.ts",
+    "astro.config.mjs",
     "browser/**/*.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "vite.config.mjs",
     "vitest.browser.config.ts",
     "vitest.config.ts"
   ]

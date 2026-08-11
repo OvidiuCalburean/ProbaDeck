@@ -1,3 +1,4 @@
+// Astro renders this view to HTML without hydrating a client-side React root.
 import {
   ArrowRight,
   ArrowSquareOut,
@@ -14,21 +15,21 @@ import { SiteFooter } from "../components/SiteFooter.js";
 const examples = [
   {
     description: "Hole cards, community cards, and every exact next-card probability.",
-    href: "/examples#holdem",
+    href: "/examples/#holdem",
     icon: CardsThree,
     link: "Open Texas Hold’em",
     title: "Texas Hold’em",
   },
   {
     description: "A tournament deck with copy-aware odds and a named Land classifier.",
-    href: "/examples#magic",
+    href: "/examples/#magic",
     icon: MagicWand,
     link: "Open Magic",
     title: "Magic: The Gathering",
   },
   {
     description: "Opening hands, returns, hidden shuffles, and the same exact engine.",
-    href: "/examples#yugioh",
+    href: "/examples/#yugioh",
     icon: Eye,
     link: "Open Yu-Gi-Oh!",
     title: "Yu-Gi-Oh!",
@@ -72,16 +73,36 @@ function ProbabilityPreview() {
         <div>
           <small>Your hand</small>
           <div className="preview-cards">
-            <img src="/assets/cards/standard/9S.png" alt="Nine of spades" />
-            <img src="/assets/cards/standard/8H.png" alt="Eight of hearts" />
+            <img
+              src="/assets/cards/standard/9S.webp"
+              alt="Nine of spades"
+              height={314}
+              width={226}
+            />
+            <img
+              src="/assets/cards/standard/8H.png"
+              alt="Eight of hearts"
+              height={314}
+              width={226}
+            />
           </div>
         </div>
         <div>
           <small>Community board</small>
           <div className="preview-cards">
-            <img src="/assets/cards/standard/9H.png" alt="Nine of hearts" />
-            <img src="/assets/cards/standard/7D.png" alt="Seven of diamonds" />
-            <img src="/assets/cards/standard/2S.png" alt="Two of spades" />
+            <img
+              src="/assets/cards/standard/9H.png"
+              alt="Nine of hearts"
+              height={314}
+              width={226}
+            />
+            <img
+              src="/assets/cards/standard/7D.png"
+              alt="Seven of diamonds"
+              height={314}
+              width={226}
+            />
+            <img src="/assets/cards/standard/2S.png" alt="Two of spades" height={314} width={226} />
           </div>
         </div>
       </div>
@@ -118,10 +139,10 @@ export function HomePage() {
                 silent approximation.
               </p>
               <div className="hero-actions">
-                <a className="button button--primary button--large" href="/examples">
+                <a className="button button--primary button--large" href="/examples/">
                   Explore the examples <ArrowRight aria-hidden="true" />
                 </a>
-                <a className="text-link" href="/docs">
+                <a className="text-link" href="/docs/">
                   Read the docs <ArrowRight aria-hidden="true" />
                 </a>
               </div>
@@ -165,7 +186,7 @@ export function HomePage() {
                 <li>Learning systems</li>
                 <li>Custom simulations</li>
               </ul>
-              <a className="text-link" href="/docs#core-model">
+              <a className="text-link" href="/docs/#core-model">
                 Define a card model <ArrowRight aria-hidden="true" />
               </a>
             </div>
@@ -180,7 +201,7 @@ export function HomePage() {
                 ProbaDeck keeps the full deterministic order for correctness while calculating from
                 exactly what a particular observer knows—nothing more.
               </p>
-              <a className="button" href="/docs#knowledge">
+              <a className="button" href="/docs/#knowledge">
                 Understand knowledge <ArrowRight aria-hidden="true" />
               </a>
             </div>
@@ -270,7 +291,7 @@ result.explanation; // structured proof`}</code>
                 implementations.
               </p>
             </div>
-            <a className="button button--dark" href="/docs#languages">
+            <a className="button button--dark" href="/docs/#languages">
               See language support <ArrowRight aria-hidden="true" />
             </a>
           </div>

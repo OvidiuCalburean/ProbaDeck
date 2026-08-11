@@ -4,6 +4,7 @@ import type { DemoCard } from "../scenarios/types.js";
 
 interface CardFaceProps {
   readonly instance: CardInstance<DemoCard>;
+  readonly priority?: boolean;
   readonly selected?: boolean;
   readonly selectable?: boolean;
   readonly compact?: boolean;
@@ -12,6 +13,7 @@ interface CardFaceProps {
 
 export function CardFace({
   instance,
+  priority = false,
   selected = false,
   selectable = false,
   compact = false,
@@ -24,9 +26,13 @@ export function CardFace({
     >
       <img
         alt={instance.card.name}
+        decoding="async"
         draggable="false"
-        loading="eager"
+        fetchPriority={priority ? "high" : "low"}
+        height={314}
+        loading={priority ? "eager" : "lazy"}
         src={instance.card.imagePath}
+        width={226}
       />
       {instance.card.game === "holdem" ? null : (
         <span className="card-caption">{instance.card.name}</span>

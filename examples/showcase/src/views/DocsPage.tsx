@@ -1,5 +1,5 @@
+// Astro pre-renders this view and hydrates its documentation controls in the browser.
 import { ArrowRight, Check, Copy, WarningCircle } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
 
 import { AppHeader } from "../components/AppHeader.js";
 import { SiteFooter } from "../components/SiteFooter.js";
@@ -73,27 +73,13 @@ const documentationLanguages = [
   { id: "go", label: "Go", status: "Planned" },
 ] as const;
 
-function CopyCodeButton({ text }: { readonly text: string }) {
-  const [copied, setCopied] = useState(false);
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1600);
-    } catch {
-      setCopied(false);
-    }
-  }
-
-  function handleCopyClick() {
-    void copy();
-  }
-
+function CopyCodeButton() {
   return (
-    <button className="copy-button" type="button" onClick={handleCopyClick} aria-label="Copy code">
-      {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
-      <span>{copied ? "Copied" : "Copy"}</span>
+    <button className="copy-button" data-copy-code type="button" aria-label="Copy code">
+      <Copy className="copy-button__default" aria-hidden="true" />
+      <Check className="copy-button__success" aria-hidden="true" />
+      <span className="copy-button__default">Copy</span>
+      <span className="copy-button__success">Copied</span>
     </button>
   );
 }
@@ -106,7 +92,7 @@ function CodeBlock({ code, label }: { readonly code: string; readonly label: str
           <span>{label}</span>
           <span className="code-language-badge">TypeScript / JavaScript</span>
         </div>
-        <CopyCodeButton text={code} />
+        <CopyCodeButton />
       </div>
       <pre>
         <code>{code}</code>
@@ -184,28 +170,6 @@ function ApiReferenceEntry({ entry }: { readonly entry: ApiEntry }) {
 }
 
 export function DocsPage() {
-  useEffect(() => {
-    let frame = 0;
-
-    function scrollToHash() {
-      window.cancelAnimationFrame(frame);
-      const id = window.location.hash.slice(1);
-      if (id === "") return;
-      frame = window.requestAnimationFrame(() => {
-        frame = window.requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView());
-      });
-    }
-
-    scrollToHash();
-    window.addEventListener("hashchange", scrollToHash);
-    window.addEventListener("load", scrollToHash);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener("hashchange", scrollToHash);
-      window.removeEventListener("load", scrollToHash);
-    };
-  }, []);
-
   return (
     <div className="app-shell" id="top">
       <AppHeader current="docs" />
@@ -281,7 +245,7 @@ export function DocsPage() {
                 </p>
                 <div className="install-command">
                   <code>pnpm pack:package</code>
-                  <CopyCodeButton text="pnpm pack:package" />
+                  <CopyCodeButton />
                 </div>
                 <dl className="runtime-facts">
                   <div>
@@ -310,7 +274,7 @@ export function DocsPage() {
                     <h2>Quick start</h2>
                     <p>Copy and run a complete ten-card example with one exact question.</p>
                   </div>
-                  <CopyCodeButton text={quickStartCode} />
+                  <CopyCodeButton />
                 </div>
                 <pre>
                   <code>{quickStartCode}</code>
@@ -567,7 +531,7 @@ export function DocsPage() {
                     snapshots, event logs, replay, and portable PCG32 randomness.
                   </p>
                 </div>
-                <a className="text-link" href="/examples">
+                <a className="text-link" href="/examples/">
                   See the contract in action <ArrowRight aria-hidden="true" />
                 </a>
               </div>
@@ -581,7 +545,7 @@ export function DocsPage() {
                   workflow—then bring your own deck.
                 </p>
               </div>
-              <a className="button button--primary button--large" href="/examples">
+              <a className="button button--primary button--large" href="/examples/">
                 Explore examples <ArrowRight aria-hidden="true" />
               </a>
             </section>

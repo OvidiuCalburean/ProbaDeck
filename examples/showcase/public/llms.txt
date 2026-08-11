@@ -1,0 +1,16 @@
+# ProbaDeck
+
+> ProbaDeck is an open-source TypeScript library for deterministic deck simulation and explainable exact probability calculations over partially known decks.
+
+The website contains a static project overview, complete API documentation, and interactive examples for Texas Hold'em, Magic: The Gathering, and Yu-Gi-Oh! The probability engine is game-independent and reports exact fractions with structured explanations.
+
+## Primary pages
+
+- [Project overview](https://probadeck.com/)
+- [Documentation and API reference](https://probadeck.com/docs/)
+- [Interactive examples](https://probadeck.com/examples/)
+
+## Source and license
+
+- [GitHub repository](https://github.com/OvidiuCalburean/ProbaDeck)
+- [MIT License](https://github.com/OvidiuCalburean/ProbaDeck/blob/main/LICENSE)

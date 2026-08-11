@@ -39,7 +39,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run project checks
-        run: pnpm check:core && pnpm check:showcase
+        run: pnpm check:core && pnpm check:showcase && pnpm check:infra
 
   release-verification:
     if: github.event_name != 'schedule'
@@ -68,6 +68,9 @@ jobs:
 
       - name: Run browser and package verification
         run: pnpm test:browser && pnpm test:package
+
+      - name: Enforce Lighthouse budgets for every public page
+        run: pnpm test:lighthouse
 
   nightly-stress:
     if: github.event_name == 'schedule'

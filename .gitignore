@@ -16,3 +16,7 @@ AGENTS.md
 /examples/showcase/design/
 /examples/showcase/qa/
 /examples/showcase/design-qa.md
+
+# Generated framework and infrastructure output
+/examples/showcase/.astro/
+/infra/aws/cdk.out/

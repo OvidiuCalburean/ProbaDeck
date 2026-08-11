@@ -4,13 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter probadeck build && vite",
-    "build": "vite build && node scripts/prepare-sites-build.mjs",
-    "check": "pnpm typecheck && pnpm test && pnpm build && pnpm test:sites",
-    "preview": "vite preview",
+    "dev": "pnpm --filter probadeck build && ASTRO_TELEMETRY_DISABLED=1 astro dev --host 0.0.0.0",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build && node scripts/prepare-sites-build.mjs",
+    "check": "pnpm typecheck && pnpm test && pnpm build && pnpm test:static && pnpm test:sites",
+    "preview": "vite preview --outDir dist/client --host 0.0.0.0",
     "sync:assets": "node scripts/sync-card-assets.mjs",
     "test": "vitest run --config vitest.config.ts",
     "test:browser": "vitest run --config vitest.browser.config.ts",
+    "test:lighthouse": "node scripts/lighthouse-audit.mjs",
+    "test:static": "node --test tests/static-build.test.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test:sites": "node --test tests/sites-worker.test.mjs"
   },
@@ -21,9 +23,11 @@
     "react-dom": "19.2.0"
   },
   "devDependencies": {
+    "@astrojs/react": "6.0.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "5.0.4",
+    "astro": "7.2.0",
     "vite": "6.4.2"
   },
   "engines": {

@@ -1,0 +1,24 @@
+---
+import { AppHeader } from "../components/AppHeader.js";
+import { SiteFooter } from "../components/SiteFooter.js";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+  description="The requested ProbaDeck page could not be found."
+  path="/404.html"
+  title="Page not found — ProbaDeck"
+>
+  <div class="app-shell" id="top">
+    <AppHeader current="home" />
+    <main class="home-main">
+      <section class="community-callout" aria-labelledby="not-found-title">
+        <p class="section-kicker">404</p>
+        <h1 id="not-found-title">This card is not in the deck.</h1>
+        <p>The page may have moved, or the address may be incomplete.</p>
+        <a class="button button--dark" href="/">Return home</a>
+      </section>
+    </main>
+    <SiteFooter />
+  </div>
+</SiteLayout>

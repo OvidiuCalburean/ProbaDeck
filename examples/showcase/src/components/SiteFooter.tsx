@@ -26,8 +26,8 @@ export function SiteFooter({ variant = "project" }: SiteFooterProps) {
       )}
 
       <nav aria-label="Footer navigation">
-        <a href="/examples">Examples</a>
-        <a href="/docs">Docs</a>
+        <a href="/examples/">Examples</a>
+        <a href="/docs/">Docs</a>
         <a
           href="https://github.com/OvidiuCalburean/ProbaDeck/blob/main/LICENSE"
           target="_blank"

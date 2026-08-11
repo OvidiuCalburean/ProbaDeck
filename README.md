@@ -87,7 +87,8 @@ snapshot still answers `1/10`.
 
 ## Interactive showcase
 
-The browser example applies the same ProbaDeck API to three recognizable games:
+The statically generated Astro/React showcase applies the same ProbaDeck API to three recognizable
+games:
 
 - Texas Hold'em deals a two-card hand and up to five community cards and lists the exact next-card
   probability for every remaining card. Reset advances the seed, reshuffles the full deck, and
@@ -108,6 +109,12 @@ Card metadata and artwork are cached in the repository so the demo works without
 calls. Refresh those assets explicitly with `pnpm sync:showcase-assets`. The showcase is a
 non-commercial documentation example and includes source attribution and trademark/copyright
 disclaimers in the page footer.
+
+The production hosting definition lives in `infra/aws`. It uses a private S3 origin, CloudFront,
+AWS WAF, Route 53, and a DNS-validated ACM certificate. Production publishing is blocked unless
+the pipeline verifies that the distribution, WAF web ACL, and hosted zone are on an active
+CloudFront FREE flat-rate plan. See [the deployment runbook](infra/aws/README.md) before changing
+any AWS resource.
 
 ## Operations and knowledge visibility
 
@@ -162,7 +169,8 @@ non-serializable source needs a replacement source before subsequent random oper
 ## Repository and development
 
 - `packages/typescript` — the release-ready TypeScript package named `probadeck`
-- `examples/showcase` — the React/Vite interactive visualization using the workspace package
+- `examples/showcase` — the statically generated Astro/React website using the workspace package
+- `infra/aws` — cost-guarded AWS infrastructure and deployment preflight checks
 - `spec` — the normative language-independent v1 contract and JSON Schemas
 - `conformance` — portable cross-language scenarios and expected exact results
 
@@ -176,8 +184,10 @@ pnpm check
 Useful commands:
 
 - `pnpm check:core` — formatting, lint, typecheck, 100% coverage, build, and TypeScript 5.0 consumer
-- `pnpm check:showcase` — typecheck, unit tests, production build, and Sites worker tests
+- `pnpm check:showcase` — typecheck, unit tests, static production build, and hosting tests
+- `pnpm check:infra` — test and synthesize the AWS infrastructure without contacting AWS
 - `pnpm test:browser` — run the ESM simulation smoke test in real Chromium
+- `pnpm test:lighthouse` — build the static site and enforce median Lighthouse budgets on every public page
 - `pnpm test:package` — pack the tarball, install it into a clean consumer, and execute it
 - `pnpm test:property` — run exhaustive and property-based verification
 - `pnpm test:stress` — run 500 generated, deterministic mixed-operation histories (up to 80

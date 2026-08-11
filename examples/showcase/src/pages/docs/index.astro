@@ -1,0 +1,44 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { DocsPage } from "../../views/DocsPage.js";
+---
+
+<SiteLayout
+  description="Learn how to build deterministic deck simulations and explainable exact probability calculations with ProbaDeck."
+  path="/docs/"
+  title="Docs — ProbaDeck"
+>
+  <DocsPage />
+</SiteLayout>
+
+<script>
+  const resetTimers = new WeakMap<HTMLButtonElement, number>();
+
+  document.addEventListener("click", async (event) => {
+    if (!(event.target instanceof Element)) return;
+    const button = event.target.closest<HTMLButtonElement>("[data-copy-code]");
+    if (button === null) return;
+
+    const container = button.closest(".install-command, .docs-code-block, .reference-code");
+    const code = container?.querySelector("code")?.textContent;
+    if (code === undefined || code === "") return;
+
+    try {
+      await navigator.clipboard.writeText(code);
+      button.classList.add("is-copied");
+      button.setAttribute("aria-label", "Code copied");
+      const existingTimer = resetTimers.get(button);
+      if (existingTimer !== undefined) window.clearTimeout(existingTimer);
+      resetTimers.set(
+        button,
+        window.setTimeout(() => {
+          button.classList.remove("is-copied");
+          button.setAttribute("aria-label", "Copy code");
+          resetTimers.delete(button);
+        }, 1600),
+      );
+    } catch {
+      button.setAttribute("aria-label", "Could not copy code");
+    }
+  });
+</script>

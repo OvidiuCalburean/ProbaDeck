@@ -12,8 +12,8 @@ const navigation: ReadonlyArray<{
   readonly id: SiteSection;
 }> = [
   { id: "home", label: "Home", href: "/" },
-  { id: "examples", label: "Examples", href: "/examples" },
-  { id: "docs", label: "Docs", href: "/docs" },
+  { id: "examples", label: "Examples", href: "/examples/" },
+  { id: "docs", label: "Docs", href: "/docs/" },
 ];
 
 export function AppHeader({ current }: AppHeaderProps) {

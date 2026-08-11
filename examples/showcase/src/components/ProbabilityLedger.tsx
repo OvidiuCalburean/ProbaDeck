@@ -191,33 +191,51 @@ export function ProbabilityLedger({ session, view, onQueryChange }: ProbabilityL
         />
       </label>
 
-      <div className="probability-table" role="table" aria-label="Card probabilities">
-        <div className="probability-row probability-row--header" role="row">
-          <span role="columnheader">Card</span>
-          <span role="columnheader">Copies</span>
-          <span role="columnheader">Exact</span>
-          <span role="columnheader">Percent</span>
-        </div>
-        {visibleRows.map((row) => (
-          <button
-            className={
-              explainedCard === row.card.name ? "probability-row is-explained" : "probability-row"
-            }
-            key={row.card.name}
-            role="row"
-            type="button"
-            onClick={() => setExplainedCard(explainedCard === row.card.name ? null : row.card.name)}
-          >
-            <span className="probability-card" role="cell">
-              <img alt="" src={row.card.imagePath} />
-              <span>{row.card.name}</span>
-            </span>
-            <span role="cell">{copyLabel(row)}</span>
-            <span role="cell">{row.exactLabel}</span>
-            <span role="cell">{formatPercentage(row.percentage)}</span>
-          </button>
-        ))}
-      </div>
+      <table className="probability-table">
+        <caption className="sr-only">Card probabilities</caption>
+        <thead>
+          <tr className="probability-row probability-row--header">
+            <th scope="col">Card</th>
+            <th scope="col">Copies</th>
+            <th scope="col">Exact</th>
+            <th scope="col">Percent</th>
+          </tr>
+        </thead>
+        <tbody>
+          {visibleRows.map((row) => {
+            const isExplained = explainedCard === row.card.name;
+            return (
+              <tr
+                className={isExplained ? "probability-row is-explained" : "probability-row"}
+                key={row.card.name}
+              >
+                <th scope="row">
+                  <button
+                    className="probability-card-button"
+                    aria-label={`${isExplained ? "Hide" : "Explain"} ${row.card.name} probability`}
+                    aria-pressed={isExplained}
+                    type="button"
+                    onClick={() => setExplainedCard(isExplained ? null : row.card.name)}
+                  >
+                    <img
+                      alt=""
+                      decoding="async"
+                      height={32}
+                      loading="lazy"
+                      src={row.card.imagePath}
+                      width={23}
+                    />
+                    <span>{row.card.name}</span>
+                  </button>
+                </th>
+                <td>{copyLabel(row)}</td>
+                <td>{row.exactLabel}</td>
+                <td>{formatPercentage(row.percentage)}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
 
       {explained === undefined ? null : (
         <div className="explanation-card">
