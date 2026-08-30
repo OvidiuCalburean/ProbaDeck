@@ -30,22 +30,22 @@
     "sync:showcase-assets": "pnpm --filter @probadeck/showcase sync:assets"
   },
   "devDependencies": {
-    "@types/node": "^24.0.0",
-    "@vitest/browser-playwright": "^4.1.10",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@types/node": "^26.4.0",
+    "@vitest/browser-playwright": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.11",
     "ajv": "^8.17.1",
     "fast-check": "^4.9.0",
     "lighthouse": "13.4.1",
-    "oxfmt": "^0.62.0",
-    "oxlint": "^1.77.0",
+    "oxfmt": "^0.65.0",
+    "oxlint": "^1.80.0",
     "oxlint-tsgolint": "^7.0.2001",
     "playwright": "^1.55.0",
     "typescript": "^7.0.2",
     "typescript-5-0": "npm:typescript@5.0.4",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "engines": {
-    "node": ">=22.12"
+    "node": ">=22.13"
   },
-  "packageManager": "pnpm@10.6.4"
+  "packageManager": "pnpm@11.24.0"
 }
