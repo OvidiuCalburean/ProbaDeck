@@ -1238,7 +1238,9 @@ pre {
 }
 
 .preview-cards img {
+  display: block;
   width: clamp(45px, 4.4vw, 64px);
+  height: auto;
   aspect-ratio: 0.72;
   object-fit: cover;
   border: 1px solid #d0cac0;
